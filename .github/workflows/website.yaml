@@ -12,6 +12,6 @@ jobs:
         with:
           node-version: "20.x"
       - name: Install dependencies
-        run: yarn install
+        run: cd website && yarn install
       - name: Run tests
-        run: yarn test
+        run: cd website && yarn test
