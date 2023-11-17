@@ -20,7 +20,7 @@ const NavBar = React.memo(() => {
   return (
     <Navbar expand="lg" style={{ userSelect: "none" }}>
       <Container>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/" role="navigate-landing">
           <FontAwesomeIcon
             icon={faTerminal}
             style={{ marginRight: "0.5rem" }}
@@ -30,7 +30,7 @@ const NavBar = React.memo(() => {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
-            <Nav.Link as={Link} to={"/tutorials"}>
+            <Nav.Link as={Link} to={"/tutorials"} role="navigate-tutorials">
               <Button
                 variant={`outline-${theme === "light" ? "dark" : "light"}`}
               >
@@ -41,7 +41,7 @@ const NavBar = React.memo(() => {
                 Tutorials
               </Button>
             </Nav.Link>
-            <Nav.Link as={Link} to={"/dashboard"}>
+            <Nav.Link as={Link} to={"/dashboard"} role="navigate-dashboard">
               <Button
                 variant={`outline-${theme === "light" ? "dark" : "light"}`}
               >
@@ -57,6 +57,7 @@ const NavBar = React.memo(() => {
         <Navbar.Collapse className="justify-content-end">
           <Button
             variant="link"
+            role="toggle-theme"
             onClick={toggleTheme}
             style={{ color: "inherit", textDecoration: "none" }}
           >
