@@ -1,9 +1,9 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import { AnimateProvider } from "./contexts/Animate";
+import { ThemeProvider } from "./contexts/Theme";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
-import { ThemeProvider } from "./contexts/Theme";
-import { AnimateProvider } from "./contexts/Animate";
 
 const router = createBrowserRouter([
   {

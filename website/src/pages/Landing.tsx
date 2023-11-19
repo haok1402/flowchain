@@ -1,26 +1,24 @@
 import React, { useCallback, useState } from "react";
-
-import Fade from "react-bootstrap/Fade";
 import Container from "react-bootstrap/Container";
+import Fade from "react-bootstrap/Fade";
 import { TypeAnimation } from "react-type-animation";
-
 import ReactFlow, {
-  applyNodeChanges,
-  Node,
-  Edge,
-  OnNodesChange,
   Background,
   BackgroundVariant,
   Controls,
-  Position,
+  Edge,
   MiniMap,
+  Node,
+  OnNodesChange,
+  Position,
+  applyNodeChanges,
 } from "reactflow";
+import "reactflow/dist/style.css";
 
+import "../assets/styles/diagram.scss";
+import "../assets/styles/landing.scss";
 import NavBar from "../components/NavBar";
 import { useAnimte } from "../contexts/Animate";
-import "reactflow/dist/style.css";
-import "../assets/styles/landing.scss";
-import "../assets/styles/diagram.scss";
 
 const initialNodes: Node[] = [
   {
@@ -98,6 +96,7 @@ const Headline = React.memo(() => {
         </span>
       ) : (
         <TypeAnimation
+          speed={50}
           cursor={false}
           sequence={[
             "Build your AI-powered, automated\nworkflow in minutes! 🚀",
@@ -113,42 +112,52 @@ const Headline = React.memo(() => {
   );
 });
 
-const Landing = React.memo(() => {
+const Diagram = React.memo(() => {
   const { showFlowDiagram } = useAnimte();
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges] = useState<Edge[]>(initialEdges);
   const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
+    (changes) => {
+      setNodes((nds) =>
+        applyNodeChanges(
+          changes.filter((change) => change.type !== "remove"),
+          nds,
+        ),
+      );
+    },
+    [setNodes],
   );
+  return (
+    <Fade in={showFlowDiagram}>
+      <div className="landing-diagram">
+        {showFlowDiagram && (
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodesDraggable={true}
+            nodesConnectable={false}
+            edgesUpdatable={false}
+            onNodesChange={onNodesChange}
+            zoomOnScroll={false}
+            proOptions={{ hideAttribution: true }}
+            fitView
+          >
+            <Controls />
+            <MiniMap />
+            <Background variant={BackgroundVariant.Dots} />
+          </ReactFlow>
+        )}
+      </div>
+    </Fade>
+  );
+});
 
+const Landing = React.memo(() => {
   return (
     <>
       <NavBar />
       <Headline />
-      <div style={{ userSelect: "none" }}>
-        <Fade in={showFlowDiagram}>
-          <div className="landing-diagram">
-            {showFlowDiagram && (
-              <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                nodesDraggable={true}
-                nodesConnectable={false}
-                edgesUpdatable={false}
-                onNodesChange={onNodesChange}
-                zoomOnScroll={false}
-                proOptions={{ hideAttribution: true }}
-                fitView
-              >
-                <Controls />
-                <MiniMap />
-                <Background variant={BackgroundVariant.Dots} />
-              </ReactFlow>
-            )}
-          </div>
-        </Fade>
-      </div>
+      <Diagram />
     </>
   );
 });

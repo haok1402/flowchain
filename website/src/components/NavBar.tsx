@@ -1,21 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
-import Fade from "react-bootstrap/Fade";
-import Navbar from "react-bootstrap/Navbar";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTerminal,
-  faMoon,
-  faSun,
   faBook,
   faHome,
+  faMoon,
+  faSun,
+  faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Fade from "react-bootstrap/Fade";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 
-import { useTheme } from "../contexts/Theme";
 import { useAnimte } from "../contexts/Animate";
+import { useTheme } from "../contexts/Theme";
 
 const NavBar = React.memo(() => {
   const { theme, toggleTheme } = useTheme();
