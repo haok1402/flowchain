@@ -11,8 +11,17 @@ interface ThemeProviderProps {
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    const localTheme = window.localStorage.getItem("theme");
-    return localTheme ? localTheme : "light";
+    const preferTheme = window.localStorage.getItem("theme");
+    if (preferTheme) {
+      return preferTheme;
+    }
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    if (systemTheme.matches) {
+      window.localStorage.setItem("theme", "dark");
+      return "dark";
+    }
+    window.localStorage.setItem("theme", "light");
+    return "light";
   });
 
   useEffect(() => {

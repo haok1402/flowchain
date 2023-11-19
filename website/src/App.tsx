@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./contexts/Theme";
+import { AnimateProvider } from "./contexts/Animate";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,9 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <AnimateProvider>
+        <RouterProvider router={router} />
+      </AnimateProvider>
     </ThemeProvider>
   );
 };
