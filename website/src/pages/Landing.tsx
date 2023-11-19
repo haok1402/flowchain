@@ -20,6 +20,36 @@ import "../assets/styles/landing.scss";
 import NavBar from "../components/NavBar";
 import { useAnimte } from "../contexts/Animate";
 
+const Headline = React.memo(() => {
+  const { showNavItems, setShowNavItems } = useAnimte();
+  const { showFlowDiagram, setShowFlowDiagram } = useAnimte();
+  const { showKeyFeatures, setShowKeyFeatures } = useAnimte();
+  return (
+    <Container className="landing-headline">
+      {showNavItems || showFlowDiagram || showKeyFeatures ? (
+        <span className="h1">
+          {"Build your AI-powered, automated\nworkflow in minutes! 🚀"}
+        </span>
+      ) : (
+        <TypeAnimation
+          speed={70}
+          cursor={false}
+          sequence={[
+            "Build your AI-powered, automated\nworkflow in minutes! 🚀",
+            500,
+            () => setShowNavItems(true),
+            500,
+            () => setShowFlowDiagram(true),
+            500,
+            () => setShowKeyFeatures(true),
+          ]}
+          className="h1"
+        />
+      )}
+    </Container>
+  );
+});
+
 const initialNodes: Node[] = [
   {
     id: "1",
@@ -85,33 +115,6 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const Headline = React.memo(() => {
-  const { showNavItems, setShowNavItems } = useAnimte();
-  const { showFlowDiagram, setShowFlowDiagram } = useAnimte();
-  return (
-    <Container>
-      {showNavItems || showFlowDiagram ? (
-        <span className="h1 landing-headline">
-          {"Build your AI-powered, automated\nworkflow in minutes! 🚀"}
-        </span>
-      ) : (
-        <TypeAnimation
-          speed={50}
-          cursor={false}
-          sequence={[
-            "Build your AI-powered, automated\nworkflow in minutes! 🚀",
-            500,
-            () => setShowNavItems(true),
-            500,
-            () => setShowFlowDiagram(true),
-          ]}
-          className="h1 landing-headline"
-        />
-      )}
-    </Container>
-  );
-});
-
 const Diagram = React.memo(() => {
   const { showFlowDiagram } = useAnimte();
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
@@ -129,7 +132,7 @@ const Diagram = React.memo(() => {
   );
   return (
     <Fade in={showFlowDiagram}>
-      <div className="landing-diagram">
+      <Container className="landing-flowchain">
         {showFlowDiagram && (
           <ReactFlow
             nodes={nodes}
@@ -138,8 +141,8 @@ const Diagram = React.memo(() => {
             nodesConnectable={false}
             edgesUpdatable={false}
             onNodesChange={onNodesChange}
-            zoomOnScroll={false}
             proOptions={{ hideAttribution: true }}
+            zoomOnScroll={false}
             fitView
           >
             <Controls />
@@ -147,7 +150,22 @@ const Diagram = React.memo(() => {
             <Background variant={BackgroundVariant.Dots} />
           </ReactFlow>
         )}
-      </div>
+      </Container>
+    </Fade>
+  );
+});
+
+const Features = React.memo(() => {
+  const { showKeyFeatures } = useAnimte();
+  return (
+    <Fade in={showKeyFeatures}>
+      <Container className="landing-features">
+        {showKeyFeatures && (
+          <div>
+            <h1 style={{ textAlign: "center" }}>Key Features</h1>
+          </div>
+        )}
+      </Container>
     </Fade>
   );
 });
@@ -158,6 +176,7 @@ const Landing = React.memo(() => {
       <NavBar />
       <Headline />
       <Diagram />
+      <Features />
     </>
   );
 });
