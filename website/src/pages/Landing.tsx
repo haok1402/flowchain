@@ -15,18 +15,20 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-import "../assets/styles/diagram.scss";
-import "../assets/styles/landing.scss";
+import "../components/Diagram.scss";
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { useAnimte } from "../contexts/Animate";
+import "./Landing.scss";
 
 const Headline = React.memo(() => {
   const { showNavItems, setShowNavItems } = useAnimte();
   const { showFlowDiagram, setShowFlowDiagram } = useAnimte();
   const { showKeyFeatures, setShowKeyFeatures } = useAnimte();
+  const { showFooter, setShowFooter } = useAnimte();
   return (
     <Container className="landing-headline">
-      {showNavItems || showFlowDiagram || showKeyFeatures ? (
+      {showNavItems || showFlowDiagram || showKeyFeatures || showFooter ? (
         <span className="h1">
           {"Build your AI-powered, automated\nworkflow in minutes! 🚀"}
         </span>
@@ -42,6 +44,8 @@ const Headline = React.memo(() => {
             () => setShowFlowDiagram(true),
             500,
             () => setShowKeyFeatures(true),
+            500,
+            () => setShowFooter(true),
           ]}
           className="h1"
         />
@@ -142,7 +146,7 @@ const Diagram = React.memo(() => {
             edgesUpdatable={false}
             onNodesChange={onNodesChange}
             proOptions={{ hideAttribution: true }}
-            zoomOnScroll={false}
+            preventScrolling={false}
             fitView
           >
             <Controls />
@@ -155,14 +159,37 @@ const Diagram = React.memo(() => {
   );
 });
 
+const readyFeatures = [
+  "Get started instantly with our library of pre-built,",
+  "industry-specific workflow templates. No need to start",
+  "from scratch - we've done the groundwork for you.",
+];
+const interfaceDescription = [
+  "No coding required! Our user-friendly interface",
+  "allows you to design and implement workflows",
+  "with ease, even if you're not a tech expert :-)",
+];
+const deploymentDesription = [
+  "Deploy your workflow with a single click! Once you've",
+  "designed your workflow, we'll take care of the rest,",
+  "so you can focus on what matters the most.",
+];
+
 const Features = React.memo(() => {
   const { showKeyFeatures } = useAnimte();
   return (
     <Fade in={showKeyFeatures}>
       <Container className="landing-features">
         {showKeyFeatures && (
-          <div>
-            <h1 style={{ textAlign: "center" }}>Key Features</h1>
+          <div style={{ whiteSpace: "pre-line" }}>
+            <h2>🎁 Ready Out-of-the-box</h2>
+            <p className="lead">{readyFeatures.join("\n")}</p>
+            <h2 style={{ textAlign: "right" }}>✨ Intuitive Interface</h2>
+            <p className="lead" style={{ textAlign: "right" }}>
+              {interfaceDescription.join("\n")}
+            </p>
+            <h2>⚙️ Rapid Deployment</h2>
+            <p className="lead">{deploymentDesription.join("\n")}</p>
           </div>
         )}
       </Container>
@@ -177,6 +204,7 @@ const Landing = React.memo(() => {
       <Headline />
       <Diagram />
       <Features />
+      <Footer />
     </>
   );
 });

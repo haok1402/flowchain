@@ -30,7 +30,7 @@ const NavBar = React.memo(() => {
       }}
     >
       <Container>
-        <Navbar.Brand as={Link} to="/" role="navigate-landing">
+        <Navbar.Brand as={Link} to="/">
           <FontAwesomeIcon
             icon={faTerminal}
             style={{ marginRight: "0.5rem" }}
@@ -43,11 +43,7 @@ const NavBar = React.memo(() => {
             <Nav>
               {showNavItems && (
                 <>
-                  <Nav.Link
-                    as={Link}
-                    to={"/tutorials"}
-                    role="navigate-tutorials"
-                  >
+                  <Nav.Link as={Link} to={"/tutorials"}>
                     <Button
                       variant={`outline-${
                         theme === "light" ? "dark" : "light"
@@ -60,11 +56,7 @@ const NavBar = React.memo(() => {
                       Tutorials
                     </Button>
                   </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to={"/dashboard"}
-                    role="navigate-dashboard"
-                  >
+                  <Nav.Link as={Link} to={"/dashboard"}>
                     <Button
                       variant={`outline-${
                         theme === "light" ? "dark" : "light"
@@ -88,7 +80,6 @@ const NavBar = React.memo(() => {
               {showNavItems && (
                 <Button
                   variant="link"
-                  role="toggle-theme"
                   onClick={toggleTheme}
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
