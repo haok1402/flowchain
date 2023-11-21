@@ -1,6 +1,6 @@
 import { faTerminal } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -88,7 +88,7 @@ const ThirdPartyAuthenticator = React.memo(() => {
           onClick={continueWithGoogle}
         >
           <GoogleIcon />
-          Continue With Google
+          Continue with Google
         </Button>
       </div>
       <div className="mb-3">
@@ -100,7 +100,7 @@ const ThirdPartyAuthenticator = React.memo(() => {
           onClick={continueWithGitHub}
         >
           {showLightGithub ? <GithubLightIcon /> : <GitHubDarkIcon />}
-          Continue With Github
+          Continue with Github
         </Button>
       </div>
       <div style={{ width: "100%" }} className="d-flex align-items-center">
@@ -124,6 +124,7 @@ const FirstPartyAuthenticator = React.memo(() => {
         <Form.Control
           type="email"
           value={email}
+          className="PrivateRoute__Input"
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -137,6 +138,7 @@ const FirstPartyAuthenticator = React.memo(() => {
         <Form.Control
           type="password"
           value={password}
+          className="PrivateRoute__Input"
           onChange={(e) => {
             setPassword(e.target.value);
           }}
@@ -158,7 +160,7 @@ const FirstPartyAuthenticator = React.memo(() => {
   );
 });
 
-const Authenticate = React.memo(() => {
+const Authentication = React.memo(() => {
   return (
     <Container className="PrivateRoute__Container">
       <Form>
@@ -169,9 +171,40 @@ const Authenticate = React.memo(() => {
   );
 });
 
+const Verification = React.memo(() => {
+  const { user, signOut, sendEmailVerification } = useFirebase();
+  useEffect(() => {
+    sendEmailVerification();
+  }, [sendEmailVerification]);
+
+  return (
+    <Container className="flex-column PrivateRoute__Container">
+      <h3>Verify Your Account</h3>
+      <p className="lead" style={{ textAlign: "center", marginBottom: "0rem" }}>
+        Almost there! We've sent a verification email to your account. <br />
+        Please check your inbox and follow the instructions to verify.
+      </p>
+      <p className="text-muted">
+        {user?.email}{" "}
+        <Link to="/dashboard" onClick={signOut}>
+          (Not you?)
+        </Link>
+      </p>
+    </Container>
+  );
+});
+
 const PrivateRoute = () => {
   const { loading, user } = useFirebase();
-  return loading ? <Loading /> : !user ? <Authenticate /> : <Outlet />;
+  return loading ? (
+    <Loading />
+  ) : !user ? (
+    <Authentication />
+  ) : !user.emailVerified ? (
+    <Verification />
+  ) : (
+    <Outlet />
+  );
 };
 
 export default PrivateRoute;

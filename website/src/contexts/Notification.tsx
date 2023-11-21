@@ -24,7 +24,7 @@ const NotificationProvider: React.FC<NotificationProviderProps> = ({
         <Toast
           autohide
           bg="danger"
-          delay={3000}
+          delay={5000}
           style={{
             color: "white",
             userSelect: "none",

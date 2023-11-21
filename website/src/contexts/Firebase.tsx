@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import {
   User,
   createUserWithEmailAndPassword,
+  sendEmailVerification as firebaseSendEmailVerification,
+  signOut as firebaseSignOut,
   getAuth,
   signInWithEmailAndPassword,
   signInWithRedirect,
@@ -31,6 +33,8 @@ const FirebaseContext = createContext({
   continueWithGoogle: () => {},
   continueWithGitHub: () => {},
   continueWithEmailAndPassword: (email: string, password: string) => {},
+  signOut: () => {},
+  sendEmailVerification: () => {},
 });
 
 interface FirebaseProviderProps {
@@ -94,6 +98,17 @@ const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
         }
       });
   };
+  const signOut = () => {
+    firebaseSignOut(auth).catch((error) => {
+      notifyFirebaseError(error.code);
+    });
+  };
+  const sendEmailVerification = () => {
+    const url = `${window.location.protocol}//${window.location.host}/dashboard`;
+    firebaseSendEmailVerification(auth.currentUser!, { url }).catch((error) => {
+      notifyFirebaseError(error.code);
+    });
+  };
 
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
@@ -110,6 +125,8 @@ const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
         continueWithGoogle,
         continueWithGitHub,
         continueWithEmailAndPassword,
+        signOut,
+        sendEmailVerification,
       }}
     >
       {children}
