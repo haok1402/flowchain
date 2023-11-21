@@ -16,3 +16,8 @@
     margin-right: 0.25rem;
   }
 }
+
+.PrivateRoute__Input:focus {
+  border-color: var(--bs-gray-500) !important;
+  box-shadow: 0rem 0rem 0.25rem var(--bs-gray-500) !important;
+}
