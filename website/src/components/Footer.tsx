@@ -11,7 +11,7 @@ const Footer = React.memo(() => {
 
   return (
     <Fade in={showFooter}>
-      <Container className="footer">
+      <Container className="Footer__Container">
         {showFooter && (
           <p className="lead" style={{ textAlign: "right" }}>
             &copy; {currentYear} FlowChain. All rights reserved.
