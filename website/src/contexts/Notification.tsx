@@ -41,7 +41,7 @@ const NotificationProvider: React.FC<NotificationProviderProps> = ({
             />
             <strong className="me-auto">Error</strong>
           </Toast.Header>
-          <Toast.Body style={{ whiteSpace: "pre-line" }}>{error}</Toast.Body>
+          <Toast.Body>{error}</Toast.Body>
         </Toast>
       </ToastContainer>
       {children}

@@ -18,7 +18,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route element={<PrivateRoute />}>
-                  <Route path="dashboard" element={<div>Dashboard</div>} />
+                  <Route path="dashboard" element={<h1>Dashboard</h1>} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

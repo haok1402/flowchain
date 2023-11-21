@@ -9,7 +9,7 @@ import "./NotFound.scss";
 const NotFound = React.memo(() => {
   const { theme } = useTheme();
   return (
-    <Container className="d-flex flex-column justify-content-center align-items-center NotFound">
+    <Container className="d-flex flex-column justify-content-center align-items-center NotFound__Container">
       <h3>404 | Page Not Found</h3>
       <Link to="/">
         <Button variant={`outline-${theme === "light" ? "dark" : "light"}`}>

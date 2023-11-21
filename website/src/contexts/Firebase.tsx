@@ -40,6 +40,7 @@ interface FirebaseProviderProps {
 const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+
   const { setError } = useNotification();
   const notifyFirebaseError = (errorCode: string) => {
     switch (errorCode) {
@@ -57,11 +58,12 @@ const FirebaseProvider: React.FC<FirebaseProviderProps> = ({ children }) => {
         break;
       default:
         setError(
-          `Something went wrong. Please try again later.\nErrorCode: ${errorCode}`,
+          `Something went wrong. Please try again later. Error code: ${errorCode}`,
         );
         break;
     }
   };
+
   const continueWithGoogle = () => {
     signInWithRedirect(auth, googleProvider);
   };
