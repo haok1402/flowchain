@@ -146,7 +146,7 @@ const Diagram = React.memo(() => {
   );
   return (
     <Fade in={showFlowDiagram}>
-      <Container className="Landing_Diagram">
+      <Container className="Landing__Diagram">
         {showFlowDiagram && (
           <ReactFlow
             nodes={nodes}

@@ -22,7 +22,7 @@ const NavBar = React.memo(() => {
   const { theme, toggleTheme } = useTheme();
   const { showNavItems } = useAnimte();
   return (
-    <Navbar expand="lg" className="TopNavBar" sticky="top">
+    <Navbar expand="lg" className="TopNavBar__Container" sticky="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
           <FontAwesomeIcon icon={faTerminal} className="TopNavBar__Icon" />
