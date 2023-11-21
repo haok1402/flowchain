@@ -5,8 +5,6 @@ const AnimateContext = createContext({
   setShowNavItems: (showNavItems: boolean) => {},
   showFlowDiagram: false,
   setShowFlowDiagram: (showFlowDiagram: boolean) => {},
-  showKeyFeatures: false,
-  setShowKeyFeatures: (showKeyFeatures: boolean) => {},
   showFooter: false,
   setShowFooter: (showFooter: boolean) => {},
 });
@@ -18,7 +16,6 @@ interface AnimateProviderProps {
 const AnimateProvider: React.FC<AnimateProviderProps> = ({ children }) => {
   const [showNavItems, setShowNavItems] = useState(false);
   const [showFlowDiagram, setShowFlowDiagram] = useState(false);
-  const [showKeyFeatures, setShowKeyFeatures] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   return (
     <AnimateContext.Provider
@@ -27,8 +24,6 @@ const AnimateProvider: React.FC<AnimateProviderProps> = ({ children }) => {
         setShowNavItems,
         showFlowDiagram,
         setShowFlowDiagram,
-        showKeyFeatures,
-        setShowKeyFeatures,
         showFooter,
         setShowFooter,
       }}

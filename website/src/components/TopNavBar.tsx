@@ -16,28 +16,21 @@ import { Link } from "react-router-dom";
 
 import { useAnimte } from "../contexts/Animate";
 import { useTheme } from "../contexts/Theme";
+import "./TopNavBar.scss";
 
 const NavBar = React.memo(() => {
   const { theme, toggleTheme } = useTheme();
   const { showNavItems } = useAnimte();
   return (
-    <Navbar
-      expand="lg"
-      style={{
-        userSelect: "none",
-        minHeight: "70px",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-      }}
-    >
+    <Navbar expand="lg" className="TopNavBar" sticky="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          <FontAwesomeIcon
-            icon={faTerminal}
-            style={{ marginRight: "0.5rem" }}
-          />
+          <FontAwesomeIcon icon={faTerminal} className="TopNavBar__Icon" />
           FlowChain
         </Navbar.Brand>
-        <Navbar.Toggle />
+        <Fade in={showNavItems}>
+          <Navbar.Toggle />
+        </Fade>
         <Navbar.Collapse>
           <Fade in={showNavItems}>
             <Nav>
@@ -51,7 +44,7 @@ const NavBar = React.memo(() => {
                     >
                       <FontAwesomeIcon
                         icon={faBook}
-                        style={{ marginRight: "0.5rem" }}
+                        className="TopNavBar__Icon"
                       />
                       Tutorials
                     </Button>
@@ -64,7 +57,7 @@ const NavBar = React.memo(() => {
                     >
                       <FontAwesomeIcon
                         icon={faHome}
-                        style={{ marginRight: "0.5rem" }}
+                        className="TopNavBar__Icon"
                       />
                       Dashboard
                     </Button>
@@ -85,7 +78,7 @@ const NavBar = React.memo(() => {
                 >
                   <FontAwesomeIcon
                     icon={theme === "light" ? faSun : faMoon}
-                    style={{ marginRight: "0.5rem" }}
+                    className="TopNavBar__Icon"
                   />
                   {theme === "light" ? "Light" : "Dark"}
                 </Button>

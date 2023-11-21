@@ -17,18 +17,17 @@ import "reactflow/dist/style.css";
 
 import "../components/Diagram.scss";
 import Footer from "../components/Footer";
-import NavBar from "../components/NavBar";
+import TopNavBar from "../components/TopNavBar";
 import { useAnimte } from "../contexts/Animate";
 import "./Landing.scss";
 
 const Headline = React.memo(() => {
   const { showNavItems, setShowNavItems } = useAnimte();
   const { showFlowDiagram, setShowFlowDiagram } = useAnimte();
-  const { showKeyFeatures, setShowKeyFeatures } = useAnimte();
   const { showFooter, setShowFooter } = useAnimte();
   return (
-    <Container className="landing-headline">
-      {showNavItems || showFlowDiagram || showKeyFeatures || showFooter ? (
+    <Container className="Landing__Headline">
+      {showNavItems || showFlowDiagram || showFooter ? (
         <span className="h1">
           {"Build your AI-powered, automated\nworkflow in minutes! 🚀"}
         </span>
@@ -43,8 +42,6 @@ const Headline = React.memo(() => {
             500,
             () => setShowFlowDiagram(true),
             500,
-            () => setShowKeyFeatures(true),
-            500,
             () => setShowFooter(true),
           ]}
           className="h1"
@@ -57,9 +54,9 @@ const Headline = React.memo(() => {
 const initialNodes: Node[] = [
   {
     id: "1",
-    type: "input",
+    targetPosition: Position.Left,
     sourcePosition: Position.Right,
-    data: { label: "Resume PDF" },
+    data: { label: "PDF Parser" },
     position: { x: 0, y: 0 },
   },
   {
@@ -73,7 +70,7 @@ const initialNodes: Node[] = [
     id: "3",
     targetPosition: Position.Left,
     sourcePosition: Position.Right,
-    data: { label: "Job Description" },
+    data: { label: "Web Parser" },
     position: { x: 0, y: 100 },
   },
   {
@@ -88,7 +85,14 @@ const initialNodes: Node[] = [
     type: "input",
     sourcePosition: Position.Right,
     data: { label: "Job Post URL" },
-    position: { x: -250, y: 50 },
+    position: { x: -250, y: 0 },
+  },
+  {
+    id: "6",
+    type: "input",
+    sourcePosition: Position.Right,
+    data: { label: "Resume PDF" },
+    position: { x: -250, y: 100 },
   },
 ];
 
@@ -117,6 +121,12 @@ const initialEdges: Edge[] = [
     target: "3",
     animated: true,
   },
+  {
+    id: "e6-1",
+    source: "6",
+    target: "1",
+    animated: true,
+  },
 ];
 
 const Diagram = React.memo(() => {
@@ -136,7 +146,7 @@ const Diagram = React.memo(() => {
   );
   return (
     <Fade in={showFlowDiagram}>
-      <Container className="landing-flowchain">
+      <Container className="Landing_Diagram">
         {showFlowDiagram && (
           <ReactFlow
             nodes={nodes}
@@ -149,48 +159,10 @@ const Diagram = React.memo(() => {
             preventScrolling={false}
             fitView
           >
-            <Controls />
-            <MiniMap />
+            {window.innerWidth > 576 && <Controls />}
+            {window.innerWidth > 576 && <MiniMap />}
             <Background variant={BackgroundVariant.Dots} />
           </ReactFlow>
-        )}
-      </Container>
-    </Fade>
-  );
-});
-
-const readyFeatures = [
-  "Get started instantly with our library of pre-built,",
-  "industry-specific workflow templates. No need to start",
-  "from scratch - we've done the groundwork for you.",
-];
-const interfaceDescription = [
-  "No coding required! Our user-friendly interface",
-  "allows you to design and implement workflows",
-  "with ease, even if you're not a tech expert :-)",
-];
-const deploymentDesription = [
-  "Deploy your workflow with a single click! Once you've",
-  "designed your workflow, we'll take care of the rest,",
-  "so you can focus on what matters the most.",
-];
-
-const Features = React.memo(() => {
-  const { showKeyFeatures } = useAnimte();
-  return (
-    <Fade in={showKeyFeatures}>
-      <Container className="landing-features">
-        {showKeyFeatures && (
-          <div style={{ whiteSpace: "pre-line" }}>
-            <h2>🎁 Ready Out-of-the-box</h2>
-            <p className="lead">{readyFeatures.join("\n")}</p>
-            <h2 style={{ textAlign: "right" }}>✨ Intuitive Interface</h2>
-            <p className="lead" style={{ textAlign: "right" }}>
-              {interfaceDescription.join("\n")}
-            </p>
-            <h2>⚙️ Rapid Deployment</h2>
-            <p className="lead">{deploymentDesription.join("\n")}</p>
-          </div>
         )}
       </Container>
     </Fade>
@@ -200,10 +172,9 @@ const Features = React.memo(() => {
 const Landing = React.memo(() => {
   return (
     <>
-      <NavBar />
+      <TopNavBar />
       <Headline />
       <Diagram />
-      <Features />
       <Footer />
     </>
   );
