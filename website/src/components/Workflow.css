@@ -1,0 +1,19 @@
+#Workflow {
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+}
+
+.Workflow__Panel {
+  padding: 0.25rem;
+}
+
+.Workflow__PanelButton {
+  min-width: 0px !important;
+  padding: 0.75rem !important;
+}
+
+.Workflow__PanelButtonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
