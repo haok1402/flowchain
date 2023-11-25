@@ -1,124 +1,110 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import {
-  Edge,
-  Node,
-  OnConnect,
-  OnEdgesChange,
-  OnNodesChange,
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-  useReactFlow,
-} from "reactflow";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { Edge, Node, useReactFlow } from "reactflow";
+import { OnNodesChange } from "reactflow";
+import { OnEdgesChange } from "reactflow";
+import { OnConnect, addEdge } from "reactflow";
+import { useEdgesState, useNodesState } from "reactflow";
+import { NodeTypes } from "reactflow";
+
+import InputNode, {
+  InputNodeDataProps,
+  InputSource,
+  InputType,
+} from "src/components/Workflow/InputNode";
 
 const WorkflowContext = createContext<{
-  selectedTool: string;
-  setSelectedTool: React.Dispatch<React.SetStateAction<string>>;
   nodes: Node[];
   edges: Edge[];
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
+  onConnect: OnConnect;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
-  onConnect: OnConnect;
-  handleOnClick: React.MouseEventHandler;
+
+  buildItemType: string;
+  setBuildItemType: (itemType: string) => void;
+  handleOnClick: React.MouseEventHandler<HTMLDivElement>;
+  supportedNodeTypes: NodeTypes;
 }>({
-  selectedTool: "Input",
-  setSelectedTool: () => {},
   nodes: [],
   edges: [],
+  setNodes: () => {},
+  setEdges: () => {},
+  onConnect: () => {},
   onNodesChange: () => {},
   onEdgesChange: () => {},
-  onConnect: () => {},
+
+  buildItemType: "Input",
+  setBuildItemType: () => {},
   handleOnClick: () => {},
+  supportedNodeTypes: {},
 });
 
 const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [selectedTool, setSelectedTool] = useState("Input");
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes],
-  );
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges],
-  );
   const onConnect: OnConnect = useCallback(
     (connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges],
   );
 
+  const [buildItemType, setBuildItemType] = useState<string>("Input");
+
   const { screenToFlowPosition } = useReactFlow();
 
-  const handleOnClick = (event: React.MouseEvent) => {
-    if (!event.ctrlKey) {
-      return;
-    }
-    switch (selectedTool) {
-      case "Input":
-        onNodesChange([
-          {
-            type: "add",
-            item: {
-              id: `${nodes.length}`,
-              position: screenToFlowPosition({
-                x: event.clientX,
-                y: event.clientY,
-              }),
-              data: { label: "Input" },
-              type: "input",
+  const supportedNodeTypes = useMemo(() => ({ InputNode }), []);
+
+  const handleOnClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (!e.ctrlKey) return;
+      switch (buildItemType) {
+        case "Input":
+          onNodesChange([
+            {
+              type: "add",
+              item: {
+                id: `${nodes.length}`,
+                position: screenToFlowPosition({
+                  x: e.clientX,
+                  y: e.clientY,
+                }),
+                data: {
+                  id: `${nodes.length}`,
+                  type: InputType[0],
+                  source:
+                    InputSource[InputType[0] as keyof typeof InputSource][0],
+                  label: "New Input",
+                } as InputNodeDataProps,
+                type: "InputNode",
+              },
             },
-          },
-        ]);
-        break;
-      case "Robot":
-        onNodesChange([
-          {
-            type: "add",
-            item: {
-              id: `${nodes.length}`,
-              position: screenToFlowPosition({
-                x: event.clientX,
-                y: event.clientY,
-              }),
-              data: { label: "Robot" },
-              type: "default",
-            },
-          },
-        ]);
-        break;
-      case "Output":
-        onNodesChange([
-          {
-            type: "add",
-            item: {
-              id: `${nodes.length}`,
-              position: screenToFlowPosition({
-                x: event.clientX,
-                y: event.clientY,
-              }),
-              data: { label: "Output" },
-              type: "output",
-            },
-          },
-        ]);
-        break;
-    }
-  };
+          ]);
+      }
+    },
+    [buildItemType, nodes, screenToFlowPosition, onNodesChange],
+  );
 
   return (
     <WorkflowContext.Provider
       value={{
-        selectedTool,
-        setSelectedTool,
         nodes,
         edges,
+        setNodes,
+        setEdges,
         onNodesChange,
         onEdgesChange,
         onConnect,
+        buildItemType,
+        setBuildItemType,
         handleOnClick,
+        supportedNodeTypes,
       }}
     >
       {children}
