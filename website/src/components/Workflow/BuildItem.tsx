@@ -3,7 +3,6 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 import { MdInput } from "react-icons/md";
 import { MdOutput } from "react-icons/md";
-import { MdFormatPaint } from "react-icons/md";
 import { RiRobot2Line } from "react-icons/ri";
 
 import { useWorkflow } from "src/contexts/Workflow";

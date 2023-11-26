@@ -17,7 +17,6 @@ import InputNode, {
   InputOptions,
 } from "src/components/Workflow/InputNode";
 import RobotNode, {
-  GPT35TurboParams,
   RobotNodeDataProps,
 } from "src/components/Workflow/RobotNode";
 
@@ -108,10 +107,6 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
                   name: "New Assistant",
                   type: "Text",
                   source: "gpt-3.5-turbo",
-                  params: {
-                    system: "",
-                    prompt: "",
-                  } as GPT35TurboParams,
                 } as RobotNodeDataProps,
                 type: "RobotNode",
               },
