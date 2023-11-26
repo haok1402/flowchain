@@ -3,12 +3,13 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 import { MdInput } from "react-icons/md";
 import { MdOutput } from "react-icons/md";
+import { MdFormatPaint } from "react-icons/md";
 import { RiRobot2Line } from "react-icons/ri";
 
 import { useWorkflow } from "src/contexts/Workflow";
 
 interface BuildItemProps {
-  itemType: "Input" | "Robot" | "Output";
+  itemType: "Input" | "Format" | "Robot" | "Output";
 }
 
 const ToggleButton = styled(Button)<ButtonProps>(({ theme, variant }) => ({
@@ -25,6 +26,8 @@ const ItemIcon = ({ itemType }: { itemType: string }) => {
   switch (itemType) {
     case "Input":
       return <MdInput fontSize="1.25rem" />;
+    case "Format":
+      return <MdFormatPaint fontSize="1.25rem" />;
     case "Robot":
       return <RiRobot2Line fontSize="1.25rem" />;
     case "Output":
@@ -38,10 +41,12 @@ const ItemTitle = (itemType: string) => {
   switch (itemType) {
     case "Input":
       return "Input — Q";
+    case "Format":
+      return "Format — W";
     case "Robot":
-      return "Robot — W";
+      return "Robot — E";
     case "Output":
-      return "Output — E";
+      return "Output — R";
     default:
       return "";
   }

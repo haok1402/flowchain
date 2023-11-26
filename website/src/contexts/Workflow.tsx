@@ -14,8 +14,7 @@ import { NodeTypes } from "reactflow";
 
 import InputNode, {
   InputNodeDataProps,
-  InputSource,
-  InputType,
+  InputOptions,
 } from "src/components/Workflow/InputNode";
 
 const WorkflowContext = createContext<{
@@ -77,15 +76,18 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
                 }),
                 data: {
                   id: `${nodes.length}`,
-                  type: InputType[0],
+                  name: "New Input",
+                  type: Object.keys(InputOptions)[0],
                   source:
-                    InputSource[InputType[0] as keyof typeof InputSource][0],
-                  label: "New Input",
+                    InputOptions[
+                      Object.keys(InputOptions)[0] as keyof typeof InputOptions
+                    ][0],
                 } as InputNodeDataProps,
                 type: "InputNode",
               },
             },
           ]);
+          break;
       }
     },
     [buildItemType, nodes, screenToFlowPosition, onNodesChange],

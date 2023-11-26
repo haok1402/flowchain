@@ -1,5 +1,5 @@
 import { CssBaseline } from "@mui/material";
-import { purple } from "@mui/material/colors";
+import { indigo } from "@mui/material/colors";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -13,7 +13,7 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: purple[700],
+      main: indigo[500],
     },
   },
 });

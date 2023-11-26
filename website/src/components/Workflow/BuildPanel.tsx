@@ -18,16 +18,23 @@ const BuildPanel = React.memo(() => {
   const pressedW = useKeyPress(["w", "W"]);
   useEffect(() => {
     if (pressedW) {
-      setBuildItemType("Robot");
+      setBuildItemType("Format");
     }
   }, [pressedW, setBuildItemType]);
 
   const pressedE = useKeyPress(["e", "E"]);
   useEffect(() => {
     if (pressedE) {
-      setBuildItemType("Output");
+      setBuildItemType("Robot");
     }
   }, [pressedE, setBuildItemType]);
+
+  const pressedR = useKeyPress(["r", "R"]);
+  useEffect(() => {
+    if (pressedR) {
+      setBuildItemType("Output");
+    }
+  }, [pressedR, setBuildItemType]);
 
   return (
     <Panel
@@ -36,6 +43,7 @@ const BuildPanel = React.memo(() => {
     >
       <Paper id="Workflow__BuildPanel" elevation={3}>
         <BuildItem itemType="Input" />
+        <BuildItem itemType="Format" />
         <BuildItem itemType="Robot" />
         <BuildItem itemType="Output" />
       </Paper>
