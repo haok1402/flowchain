@@ -1,13 +1,11 @@
-import { useTheme } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/system/Box";
 import React, { useEffect, useState } from "react";
-import { MdEdit } from "react-icons/md";
 import { Handle, Position } from "reactflow";
 
+import NodeHeader from "src/components/Workflow/NodeHeader";
 import { useWorkflow } from "src/contexts/Workflow";
 
 export interface InputNodeDataProps {
@@ -17,81 +15,10 @@ export interface InputNodeDataProps {
   source: string;
 }
 
-interface InputNodeProps {
-  data: InputNodeDataProps;
-}
-
 export const InputOptions = {
   Text: ["Type Manually", "Upload from Device", "Fetch from URL"],
   Image: ["Upload from Device", "Fetch from URL"],
 };
-
-interface NodeHeaderProps extends BoxProps {
-  name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  editableName: boolean;
-  setEditableName: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const NodeHeader: React.FC<NodeHeaderProps> = React.memo(
-  ({ name, setName, editableName, setEditableName }) => {
-    const theme = useTheme();
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: 1,
-          color: theme.palette.primary.contrastText,
-          backgroundColor: theme.palette.primary.main,
-          borderTopLeftRadius: theme.shape.borderRadius,
-          borderTopRightRadius: theme.shape.borderRadius,
-        }}
-      >
-        {editableName ? (
-          <TextField
-            variant="standard"
-            value={name}
-            InputProps={{
-              autoComplete: "off",
-              autoFocus: true,
-              disableUnderline: true,
-            }}
-            sx={{
-              input: {
-                ...theme.typography.body1,
-                color: theme.palette.primary.contrastText,
-                fontWeight: theme.typography.fontWeightBold,
-              },
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                setEditableName(false);
-              }
-            }}
-            onBlur={() => setEditableName(false)}
-            onChange={(event) => setName(event.target.value)}
-          />
-        ) : (
-          <Typography
-            style={{
-              color: theme.palette.primary.contrastText,
-              fontWeight: theme.typography.fontWeightBold,
-            }}
-          >
-            {name}
-          </Typography>
-        )}
-        <MdEdit
-          style={{ fontSize: "1.25rem", cursor: "pointer" }}
-          onClick={() => setEditableName(true)}
-        />
-      </Box>
-    );
-  },
-);
 
 interface NodeBodyProps extends BoxProps {
   inputType: string;
@@ -147,6 +74,10 @@ const NodeBody: React.FC<NodeBodyProps> = React.memo(
     );
   },
 );
+
+interface InputNodeProps {
+  data: InputNodeDataProps;
+}
 
 const InputNode: React.FC<InputNodeProps> = React.memo(({ data }) => {
   const [name, setName] = useState(data.name);

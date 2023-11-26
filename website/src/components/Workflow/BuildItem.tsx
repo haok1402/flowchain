@@ -26,8 +26,6 @@ const ItemIcon = ({ itemType }: { itemType: string }) => {
   switch (itemType) {
     case "Input":
       return <MdInput fontSize="1.25rem" />;
-    case "Format":
-      return <MdFormatPaint fontSize="1.25rem" />;
     case "Robot":
       return <RiRobot2Line fontSize="1.25rem" />;
     case "Output":
@@ -41,12 +39,10 @@ const ItemTitle = (itemType: string) => {
   switch (itemType) {
     case "Input":
       return "Input — Q";
-    case "Format":
-      return "Format — W";
     case "Robot":
-      return "Robot — E";
+      return "Robot — W";
     case "Output":
-      return "Output — R";
+      return "Output — E";
     default:
       return "";
   }
