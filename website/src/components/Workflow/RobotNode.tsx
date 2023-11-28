@@ -2,7 +2,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Box, { BoxProps } from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Handle, Position } from "reactflow";
 
 import NodeHeader from "src/components/Workflow/NodeHeader";
 import { useWorkflow } from "src/contexts/Workflow";
@@ -15,12 +16,37 @@ export interface RobotNodeDataProps {
   params: {
     system: string;
     prompt: string;
-  }
+  };
 }
 
 export const RobotOptions = {
   Text: ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
 };
+
+interface NodeHandleProps {
+  prompt: string;
+}
+
+const NodeHandle: React.FC<NodeHandleProps> = React.memo(({ prompt }) => {
+  const match = prompt.match(/{{\s*(.*?)\s*}}/g);
+  const items = match
+    ? match.map((item) => item.replace(/{{\s*|\s*}}/g, ""))
+    : [];
+  const incre = (75 - 25) / (items.length - 1);
+  return (
+    <>
+      {items.map((item, index) => (
+        <Handle
+          key={index}
+          id={String(index + 1)}
+          type="target"
+          position={Position.Left}
+          style={{ top: `${25 + index * incre}%` }}
+        />
+      ))}
+    </>
+  );
+});
 
 interface NodeBodyProps extends BoxProps {
   robotType: string;
@@ -148,7 +174,7 @@ const RobotNode: React.FC<RobotNodeProps> = React.memo(({ data }) => {
             params: {
               system: system,
               prompt: prompt,
-            }
+            },
           };
         }
         return node;
@@ -158,6 +184,7 @@ const RobotNode: React.FC<RobotNodeProps> = React.memo(({ data }) => {
 
   return (
     <>
+      <NodeHandle prompt={prompt} />
       <Paper elevation={3} sx={{ minWidth: "450px" }}>
         <NodeHeader
           name={name}
