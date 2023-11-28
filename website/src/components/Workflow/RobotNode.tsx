@@ -2,20 +2,24 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Box, { BoxProps } from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
-import { Handle, Position } from "reactflow";
+import React, { useState, useEffect } from "react";
 
 import NodeHeader from "src/components/Workflow/NodeHeader";
+import { useWorkflow } from "src/contexts/Workflow";
 
 export interface RobotNodeDataProps {
   id: string;
   name: string;
   type: string;
   source: string;
+  params: {
+    system: string;
+    prompt: string;
+  }
 }
 
 export const RobotOptions = {
-  Text: ["gpt-3.5-turbo", "gpt-4", "gpt-3.5-turbo-16k", "gpt-4-32k"],
+  Text: ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
 };
 
 interface NodeBodyProps extends BoxProps {
@@ -93,7 +97,7 @@ const NodeBody: React.FC<NodeBodyProps> = React.memo(
                   <TextField
                     multiline
                     maxRows={25}
-                    label="system"
+                    label="System Prompt"
                     className="nodrag"
                     value={system}
                     onChange={(e) => setSystem(e.target.value)}
@@ -102,7 +106,7 @@ const NodeBody: React.FC<NodeBodyProps> = React.memo(
                   <TextField
                     multiline
                     maxRows={25}
-                    label="prompt"
+                    label="User Prompt"
                     className="nodrag"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
@@ -128,18 +132,30 @@ const RobotNode: React.FC<RobotNodeProps> = React.memo(({ data }) => {
   const [editableName, setEditableName] = useState(false);
   const [robotType, setRobotType] = useState("Text");
   const [robotSource, setRobotSource] = useState("gpt-3.5-turbo");
-  const [system, setSystem] = useState(
-    [
-      "You're a helpful assistant tasked with generating personalized cover letters.",
-      "By analyzing the job description and applicant's resume, your mission is to craft compelling cover letters that showcase the candidate's qualifications, ensuring they stand out and align with the job requirements.",
-    ].join("\n\n"),
-  );
-  const [prompt, setPrompt] = useState(
-    [
-      ["Job Description:", "{{ Job Description }}"].join("\n"),
-      ["Candidate's Resume:", "{{ Candidate's Resume }}"].join("\n"),
-    ].join("\n\n"),
-  );
+  const [system, setSystem] = useState(data.params.system || "");
+  const [prompt, setPrompt] = useState(data.params.prompt || "");
+
+  const { setNodes } = useWorkflow();
+  useEffect(() => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === data.id) {
+          node.data = {
+            ...node.data,
+            name: name,
+            type: robotType,
+            source: robotSource,
+            params: {
+              system: system,
+              prompt: prompt,
+            }
+          };
+        }
+        return node;
+      }),
+    );
+  }, [setNodes, data.id, name, robotType, robotSource, system, prompt]);
+
   return (
     <>
       <Paper elevation={3} sx={{ minWidth: "450px" }}>

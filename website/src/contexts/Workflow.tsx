@@ -107,6 +107,10 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
                   name: "New Assistant",
                   type: "Text",
                   source: "gpt-3.5-turbo",
+                  params: {
+                    system: "You're a helpful assistant. You will receive ... from the user. Based on that, your task is to ...",
+                    prompt: [["Item A", "{{ Item A }}"].join("\n"), ["Item B", "{{ Item B }}"].join("\n")].join("\n\n"),
+                  }
                 } as RobotNodeDataProps,
                 type: "RobotNode",
               },
