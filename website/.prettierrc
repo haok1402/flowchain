@@ -1,9 +1,6 @@
 {
   "importOrder": [
-    "^@core/(.*)$",
-    "^@server/(.*)$",
-    "^@ui/(.*)$",
-    "^[./]"
+    "^(src|reactflow)/(.*)$"
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
