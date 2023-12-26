@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline } from "@mui/material";
+import { indigo } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import React from "react";
 
-function App() {
+import Workflow from "src/components/Workflow";
+import { WorkflowProvider } from "src/contexts/Workflow";
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: indigo[500],
+    },
+  },
+});
+
+const App = React.memo(() => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <WorkflowProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Workflow />
+      </ThemeProvider>
+    </WorkflowProvider>
   );
-}
+});
 
 export default App;
