@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import React from "react";
-import { MdInput, MdOutput } from "react-icons/md";
+import { ImEnter, ImExit } from "react-icons/im";
 import { RiRobot2Line } from "react-icons/ri";
 import { Panel } from "reactflow";
 
@@ -40,7 +40,7 @@ const BuildPanel = React.memo(() => {
           onClick={() => setBuildType("fc:input")}
           isSelected={buildType === "fc:input"}
         >
-          <MdInput size="1.25rem" />
+          <ImEnter size="1.25rem" />
         </BuildButton>
         <BuildButton
           onClick={() => setBuildType("fc:robot")}
@@ -52,7 +52,7 @@ const BuildPanel = React.memo(() => {
           onClick={() => setBuildType("fc:output")}
           isSelected={buildType === "fc:output"}
         >
-          <MdOutput size="1.25rem" />
+          <ImExit size="1.25rem" />
         </BuildButton>
       </Paper>
     </Panel>
