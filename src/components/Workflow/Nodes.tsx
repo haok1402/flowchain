@@ -117,6 +117,7 @@ export const InputNode: React.FC = () => {
               <FormLabel>Link</FormLabel>
               <TextField
                 fullWidth
+                autoFocus
                 variant="standard"
                 autoComplete="off"
                 value={websiteUrl}
