@@ -19,6 +19,7 @@ const Workflow = React.memo(() => {
   const theme = useTheme();
   const { nodes, edges } = useWorkflow();
   const { onNodesChange, onEdgesChange, onConnect } = useWorkflow();
+  const { nodeTypes } = useWorkflow();
   return (
     <Box style={{ width: "100vw", height: "100vh" }}>
       <StyledReactFlow
@@ -28,7 +29,9 @@ const Workflow = React.memo(() => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        nodeTypes={nodeTypes}
         fitView
+        fitViewOptions={{ maxZoom: 1 }}
       >
         <BuildPanel />
         <Background variant={BackgroundVariant.Dots} />
