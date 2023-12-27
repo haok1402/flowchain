@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { ImEnter, ImExit } from "react-icons/im";
 import { RiRobot2Line } from "react-icons/ri";
@@ -13,13 +14,14 @@ const BuildButton: React.FC<
     onClick: React.MouseEventHandler<HTMLButtonElement>;
   }>
 > = React.memo(({ children, isSelected, onClick }) => {
+  const theme = useTheme();
   return (
     <Button
       onClick={onClick}
       variant={isSelected ? "contained" : "outlined"}
       sx={{
         minWidth: 0,
-        padding: "0.75rem",
+        padding: theme.spacing(1.5),
         border: "none",
         "&:hover": {
           border: "none",
@@ -32,27 +34,28 @@ const BuildButton: React.FC<
 });
 
 const BuildPanel = React.memo(() => {
+  const theme = useTheme();
   const { buildType, setBuildType } = useWorkflow();
   return (
     <Panel position="bottom-center">
-      <Paper elevation={3}>
+      <Paper>
         <BuildButton
           onClick={() => setBuildType("fc:input")}
           isSelected={buildType === "fc:input"}
         >
-          <ImEnter size="1.25rem" />
+          <ImEnter size={theme.spacing(2.5)} />
         </BuildButton>
         <BuildButton
           onClick={() => setBuildType("fc:robot")}
           isSelected={buildType === "fc:robot"}
         >
-          <RiRobot2Line size="1.25rem" />
+          <RiRobot2Line size={theme.spacing(2.5)} />
         </BuildButton>
         <BuildButton
           onClick={() => setBuildType("fc:output")}
           isSelected={buildType === "fc:output"}
         >
-          <ImExit size="1.25rem" />
+          <ImExit size={theme.spacing(2.5)} />
         </BuildButton>
       </Paper>
     </Panel>
