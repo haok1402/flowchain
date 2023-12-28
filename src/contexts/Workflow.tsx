@@ -15,6 +15,8 @@ import { InputNode } from "src/components/Workflow/Nodes";
 const WorkflowContext = createContext<{
   nodes: Node[];
   edges: Edge[];
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -27,6 +29,8 @@ const WorkflowContext = createContext<{
 }>({
   nodes: [],
   edges: [],
+  setNodes: () => {},
+  setEdges: () => {},
   onNodesChange: () => {},
   onEdgesChange: () => {},
   onConnect: () => {},
@@ -42,7 +46,11 @@ const initialNodes: Node[] = [
   {
     id: "1",
     data: {
-      label: "Input Node",
+      title: "Text Input",
+      source: "document",
+      payload: {
+        websiteLink: "",
+      },
     },
     type: "fc:input",
     position: { x: 0, y: 0 },
@@ -85,6 +93,8 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
       value={{
         nodes,
         edges,
+        setNodes,
+        setEdges,
         onNodesChange,
         onEdgesChange,
         onConnect,

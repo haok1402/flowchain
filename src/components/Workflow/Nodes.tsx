@@ -12,15 +12,18 @@ import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImEnter } from "react-icons/im";
 import { MdCloudUpload } from "react-icons/md";
 import { MdClose, MdHelp } from "react-icons/md";
+import { Handle, Position } from "reactflow";
+
+import { useWorkflow } from "src/contexts/Workflow";
 
 const CardTitle: React.FC<{
   title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-}> = React.memo(({ title, setTitle }) => {
+  handleTitleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = React.memo(({ title, handleTitleOnChange }) => {
   const theme = useTheme();
   const [editing, setEditing] = useState(false);
   return editing ? (
@@ -31,7 +34,7 @@ const CardTitle: React.FC<{
       variant="standard"
       value={title}
       onBlur={() => setEditing(false)}
-      onChange={(e) => setTitle(e.target.value)}
+      onChange={handleTitleOnChange}
       inputProps={{
         style: {
           padding: 0,
@@ -57,17 +60,64 @@ const CardAction: React.FC = React.memo(() => {
   );
 });
 
-export const InputNode: React.FC = () => {
+export interface InputNodeData {
+  title: string;
+  source: "document" | "website";
+  payload: { websiteLink: string };
+}
+
+export const InputNode: React.FC<{
+  id: string;
+  data: InputNodeData;
+}> = ({ id, data }) => {
   const theme = useTheme();
-  const [title, setTitle] = useState("Text Input");
-  const [source, setSource] = useState("document");
-  const [websiteUrl, setWebsiteUrl] = useState("");
+
+  const [title, setTitle] = useState(data.title);
+  const handleTitleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const [source, setSource] = useState(data.source);
+  const handleSourceOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSource(e.target.value as "document" | "website");
+  };
+
+  const [websiteLink, setWebsiteLink] = useState(data.payload.websiteLink);
+  const handleWebsiteLinkOnChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setWebsiteLink(e.target.value);
+  };
+
+  const { setNodes } = useWorkflow();
+  useEffect(() => {
+    setNodes((value) =>
+      value.map((node) => {
+        if (node.id === id) {
+          node.data = {
+            ...node.data,
+            title,
+            source,
+            payload: { websiteURL: websiteLink },
+          };
+        }
+        return node;
+      }),
+    );
+  }, [setNodes, id, title, source, websiteLink]);
+
   return (
     <>
+      <Handle type="source" position={Position.Right} />
       <Card sx={{ width: theme.spacing(45) }}>
         <CardHeader
           avatar={<ImEnter />}
-          title={<CardTitle title={title} setTitle={setTitle} />}
+          title={
+            <CardTitle
+              title={title}
+              handleTitleOnChange={handleTitleOnChange}
+            />
+          }
           subheader="Extract text from a given source."
           action={<CardAction />}
         />
@@ -82,11 +132,7 @@ export const InputNode: React.FC = () => {
             >
               Source
             </FormLabel>
-            <RadioGroup
-              row
-              value={source}
-              onChange={(e) => setSource(e.target.value)}
-            >
+            <RadioGroup row value={source} onChange={handleSourceOnChange}>
               <FormControlLabel
                 value="document"
                 control={<Radio />}
@@ -120,8 +166,8 @@ export const InputNode: React.FC = () => {
                 autoFocus
                 variant="standard"
                 autoComplete="off"
-                value={websiteUrl}
-                onChange={(e) => setWebsiteUrl(e.target.value)}
+                value={websiteLink}
+                onChange={handleWebsiteLinkOnChange}
               />
             </FormControl>
           )}
