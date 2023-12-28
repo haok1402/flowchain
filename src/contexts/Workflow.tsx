@@ -11,6 +11,7 @@ import { OnConnect, addEdge } from "reactflow";
 import { NodeTypes } from "reactflow";
 
 import { InputNode } from "src/components/Workflow/Nodes";
+import { OutputNode } from "src/components/Workflow/Nodes";
 
 const WorkflowContext = createContext<{
   nodes: Node[];
@@ -41,12 +42,10 @@ const WorkflowContext = createContext<{
 });
 
 const initialNodes: Node[] = [
-  // { id: "1", data: { label: "Node 1" }, position: { x: 5, y: 5 } },
-  // { id: "2", data: { label: "Node 2" }, position: { x: 5, y: 100 } },
   {
     id: "1",
     data: {
-      title: "Text Input",
+      title: "Source",
       source: "document",
       payload: {
         websiteLink: "",
@@ -55,10 +54,22 @@ const initialNodes: Node[] = [
     type: "fc:input",
     position: { x: 0, y: 0 },
   },
+  {
+    id: "2",
+    data: {
+      title: "Target",
+    },
+    type: "fc:output",
+    position: { x: window.innerWidth / 2, y: -window.innerHeight / 4 },
+  },
 ];
 
 const initialEdges: Edge[] = [
-  // { id: "e1-2", source: "1", target: "2" }
+  {
+    id: "1-2",
+    source: "1",
+    target: "2",
+  },
 ];
 
 const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -81,6 +92,7 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const nodeTypes = useMemo(
     () => ({
       "fc:input": InputNode,
+      "fc:output": OutputNode,
     }),
     [],
   );

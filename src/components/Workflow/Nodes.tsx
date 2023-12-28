@@ -9,13 +9,15 @@ import FormLabel from "@mui/material/FormLabel";
 import IconButton from "@mui/material/IconButton";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Skeleton from "@mui/material/Skeleton";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
-import { ImEnter } from "react-icons/im";
+import { ImEnter, ImExit } from "react-icons/im";
 import { MdCloudUpload } from "react-icons/md";
 import { MdClose, MdHelp } from "react-icons/md";
+import { MdContentCopy } from "react-icons/md";
 import { Handle, Position } from "reactflow";
 import { NodeProps } from "reactflow";
 
@@ -25,8 +27,9 @@ const CardTitle: React.FC<{
   title: string;
   handleTitleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }> = React.memo(({ title, handleTitleOnChange }) => {
-  const theme = useTheme();
+  const { typography } = useTheme();
   const [editing, setEditing] = useState(false);
+
   return editing ? (
     <TextField
       fullWidth
@@ -39,7 +42,7 @@ const CardTitle: React.FC<{
       inputProps={{
         style: {
           padding: 0,
-          fontSize: theme.typography.body1.fontSize,
+          fontSize: typography.body1.fontSize,
         },
       }}
     />
@@ -72,7 +75,7 @@ interface InputNodeProps extends NodeProps {
 }
 
 export const InputNode: React.FC<InputNodeProps> = ({ id, data }) => {
-  const theme = useTheme();
+  const { spacing, palette } = useTheme();
 
   const [title, setTitle] = useState(data.title);
   const handleTitleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +114,7 @@ export const InputNode: React.FC<InputNodeProps> = ({ id, data }) => {
   return (
     <>
       <Handle type="source" position={Position.Right} />
-      <Card sx={{ width: theme.spacing(45) }}>
+      <Card elevation={3} sx={{ width: spacing(45) }}>
         <CardHeader
           avatar={<ImEnter />}
           title={
@@ -128,7 +131,7 @@ export const InputNode: React.FC<InputNodeProps> = ({ id, data }) => {
             <FormLabel
               sx={{
                 "&.Mui-focused": {
-                  color: theme.palette.text.secondary,
+                  color: palette.text.secondary,
                 },
               }}
             >
@@ -173,6 +176,76 @@ export const InputNode: React.FC<InputNodeProps> = ({ id, data }) => {
               />
             </FormControl>
           )}
+        </CardContent>
+      </Card>
+    </>
+  );
+};
+
+export interface OutputNodeData {
+  title: string;
+}
+
+interface OutputNodeProps extends NodeProps {
+  data: OutputNodeData;
+}
+
+export const OutputNode: React.FC<OutputNodeProps> = ({ id, data }) => {
+  const { spacing, palette } = useTheme();
+
+  const [title, setTitle] = useState(data.title);
+  const handleTitleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const { setNodes } = useWorkflow();
+  useEffect(() => {
+    setNodes((value) =>
+      value.map((node) => {
+        if (node.id === id) {
+          node.data = {
+            ...node.data,
+            title,
+          };
+        }
+        return node;
+      }),
+    );
+  }, [setNodes, id, title]);
+
+  return (
+    <>
+      <Handle type="target" position={Position.Left} />
+      <Card elevation={3} sx={{ width: spacing(45) }}>
+        <CardHeader
+          avatar={<ImExit />}
+          title={
+            <CardTitle
+              title={title}
+              handleTitleOnChange={handleTitleOnChange}
+            />
+          }
+          subheader="Display result of the workflow."
+          action={<CardAction />}
+        />
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography color={palette.text.secondary}>Response</Typography>
+            <IconButton>
+              <MdContentCopy />
+            </IconButton>
+          </Box>
+          <Typography>
+            <Skeleton />
+            <Skeleton animation="wave" />
+            <Skeleton animation={false} />
+          </Typography>
         </CardContent>
       </Card>
     </>
