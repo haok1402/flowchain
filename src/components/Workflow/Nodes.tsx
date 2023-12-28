@@ -17,6 +17,7 @@ import { ImEnter } from "react-icons/im";
 import { MdCloudUpload } from "react-icons/md";
 import { MdClose, MdHelp } from "react-icons/md";
 import { Handle, Position } from "reactflow";
+import { NodeProps } from "reactflow";
 
 import { useWorkflow } from "src/contexts/Workflow";
 
@@ -66,10 +67,11 @@ export interface InputNodeData {
   payload: { websiteLink: string };
 }
 
-export const InputNode: React.FC<{
-  id: string;
+interface InputNodeProps extends NodeProps {
   data: InputNodeData;
-}> = ({ id, data }) => {
+}
+
+export const InputNode: React.FC<InputNodeProps> = ({ id, data }) => {
   const theme = useTheme();
 
   const [title, setTitle] = useState(data.title);
