@@ -6,6 +6,7 @@ import React from "react";
 import ReactFlow from "reactflow";
 import { Background, BackgroundVariant } from "reactflow";
 
+import ActionPanel from "src/components/Workflow/ActionPanel";
 import BuildPanel from "src/components/Workflow/BuildPanel";
 import { useWorkflow } from "src/contexts/Workflow";
 
@@ -34,6 +35,7 @@ const Workflow = React.memo(() => {
         fitViewOptions={{ maxZoom: 1 }}
       >
         <BuildPanel />
+        <ActionPanel />
         <Background variant={BackgroundVariant.Dots} />
       </StyledReactFlow>
     </Box>

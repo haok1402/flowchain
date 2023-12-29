@@ -38,7 +38,7 @@ const BuildPanel = React.memo(() => {
   const { buildType, setBuildType } = useWorkflow();
   return (
     <Panel position="bottom-center">
-      <Paper>
+      <Paper elevation={3}>
         <BuildButton
           onClick={() => setBuildType("fc:input")}
           isSelected={buildType === "fc:input"}
