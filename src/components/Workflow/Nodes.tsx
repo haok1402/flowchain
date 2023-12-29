@@ -19,7 +19,8 @@ import { MdCloudUpload } from "react-icons/md";
 import { MdClose, MdHelp } from "react-icons/md";
 import { MdContentCopy } from "react-icons/md";
 import { Handle, Position } from "reactflow";
-import { NodeProps } from "reactflow";
+import { Node, NodeProps } from "reactflow";
+import { getConnectedEdges } from "reactflow";
 
 import { useWorkflow } from "src/contexts/Workflow";
 
@@ -55,18 +56,24 @@ const CardTitle: React.FC<CardTitleProps> = React.memo(
   },
 );
 
-const CardAction: React.FC = React.memo(() => {
-  return (
-    <Box>
-      <IconButton>
-        <MdHelp />
-      </IconButton>
-      <IconButton>
-        <MdClose />
-      </IconButton>
-    </Box>
-  );
-});
+interface CardActionProps {
+  handleDeleteOnClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const CardAction: React.FC<CardActionProps> = React.memo(
+  ({ handleDeleteOnClick }) => {
+    return (
+      <Box>
+        <IconButton>
+          <MdHelp />
+        </IconButton>
+        <IconButton onClick={handleDeleteOnClick}>
+          <MdClose />
+        </IconButton>
+      </Box>
+    );
+  },
+);
 
 export interface InputNodeData {
   title: string;
@@ -123,6 +130,25 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
       );
     }, [setNodes, id, title, source, websiteLink]);
 
+    const { nodes, edges, setEdges } = useWorkflow();
+    const handleDeleteOnClick = useCallback(() => {
+      let nodeToDelete = null;
+      const newNodes = nodes.reduce((acc, node) => {
+        if (node.id === id) {
+          nodeToDelete = node;
+        } else {
+          acc.push(node);
+        }
+        return acc;
+      }, [] as Node[]);
+      if (nodeToDelete !== null) {
+        setNodes(newNodes);
+        const connectedEdges = getConnectedEdges([nodeToDelete], edges);
+        const newEdges = edges.filter((edge) => !connectedEdges.includes(edge));
+        setEdges(newEdges);
+      }
+    }, [id, nodes, edges, setNodes, setEdges]);
+
     return (
       <>
         <Handle type="source" position={Position.Right} />
@@ -136,7 +162,7 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
               />
             }
             subheader="Extract text from a given source."
-            action={<CardAction />}
+            action={<CardAction handleDeleteOnClick={handleDeleteOnClick} />}
           />
           <CardContent>
             <FormControl fullWidth>
@@ -230,6 +256,25 @@ export const OutputNode: React.FC<OutputNodeProps> = React.memo(
       );
     }, [setNodes, id, title]);
 
+    const { nodes, edges, setEdges } = useWorkflow();
+    const handleDeleteOnClick = useCallback(() => {
+      let nodeToDelete = null;
+      const newNodes = nodes.reduce((acc, node) => {
+        if (node.id === id) {
+          nodeToDelete = node;
+        } else {
+          acc.push(node);
+        }
+        return acc;
+      }, [] as Node[]);
+      if (nodeToDelete !== null) {
+        setNodes(newNodes);
+        const connectedEdges = getConnectedEdges([nodeToDelete], edges);
+        const newEdges = edges.filter((edge) => !connectedEdges.includes(edge));
+        setEdges(newEdges);
+      }
+    }, [id, nodes, edges, setNodes, setEdges]);
+
     return (
       <>
         <Handle type="target" position={Position.Left} />
@@ -243,7 +288,7 @@ export const OutputNode: React.FC<OutputNodeProps> = React.memo(
               />
             }
             subheader="Display result of the workflow."
-            action={<CardAction />}
+            action={<CardAction handleDeleteOnClick={handleDeleteOnClick} />}
           />
           <CardContent>
             <Box
