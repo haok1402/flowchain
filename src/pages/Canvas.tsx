@@ -16,7 +16,7 @@ const StyledReactFlow = styled(ReactFlow)<{ theme: Theme }>`
   }
 `;
 
-const Workflow = React.memo(() => {
+const Canvas = React.memo(() => {
   const theme = useTheme();
   const { nodes, edges } = useWorkflow();
   const { onNodesChange, onEdgesChange, onConnect } = useWorkflow();
@@ -42,4 +42,4 @@ const Workflow = React.memo(() => {
   );
 });
 
-export default Workflow;
+export default Canvas;

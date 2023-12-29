@@ -3,10 +3,10 @@ import { indigo } from "@mui/material/colors";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React from "react";
 
-import Workflow from "src/components/Workflow";
 import { WorkflowProvider } from "src/contexts/Workflow";
+import Canvas from "src/pages/Canvas";
 
-const theme = createTheme({
+const AppTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
@@ -15,14 +15,24 @@ const theme = createTheme({
   },
 });
 
+const AppContext: React.FC<React.PropsWithChildren> = React.memo(
+  ({ children }) => {
+    return (
+      <WorkflowProvider>
+        <ThemeProvider theme={AppTheme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
+      </WorkflowProvider>
+    );
+  },
+);
+
 const App = React.memo(() => {
   return (
-    <WorkflowProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Workflow />
-      </ThemeProvider>
-    </WorkflowProvider>
+    <AppContext>
+      <Canvas />
+    </AppContext>
   );
 });
 
