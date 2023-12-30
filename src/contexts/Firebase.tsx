@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { Auth, User, getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useContext } from "react";
 import { useEffect, useState } from "react";
 
@@ -17,8 +17,10 @@ const auth = getAuth(app);
 
 const FirebaseContext = createContext<{
   user: User | null;
+  auth: Auth;
 }>({
   user: null,
+  auth,
 });
 
 export const FirebaseProvider: React.FC<React.PropsWithChildren> = ({
@@ -30,7 +32,7 @@ export const FirebaseProvider: React.FC<React.PropsWithChildren> = ({
   }, []);
 
   return (
-    <FirebaseContext.Provider value={{ user }}>
+    <FirebaseContext.Provider value={{ user, auth }}>
       {children}
     </FirebaseContext.Provider>
   );

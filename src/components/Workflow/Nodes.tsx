@@ -152,7 +152,7 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
     return (
       <>
         <Handle type="source" position={Position.Right} />
-        <Card elevation={3} sx={{ width: spacing(45) }}>
+        <Card sx={{ width: spacing(45) }}>
           <CardHeader
             avatar={<ImEnter />}
             title={
@@ -278,7 +278,7 @@ export const OutputNode: React.FC<OutputNodeProps> = React.memo(
     return (
       <>
         <Handle type="target" position={Position.Left} />
-        <Card elevation={3} sx={{ width: spacing(45) }}>
+        <Card sx={{ width: spacing(45) }}>
           <CardHeader
             avatar={<ImExit />}
             title={
