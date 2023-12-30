@@ -72,7 +72,9 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
 
@@ -121,6 +123,4 @@ const WorkflowProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 };
 
-const useWorkflow = () => useContext(WorkflowContext);
-
-export { WorkflowProvider, useWorkflow };
+export const useWorkflow = () => useContext(WorkflowContext);
