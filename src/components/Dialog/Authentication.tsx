@@ -5,31 +5,14 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import { signInWithRedirect } from "firebase/auth";
 import React from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { FaTerminal } from "react-icons/fa";
 
-const DialogPaper: React.FC<React.PropsWithChildren> = React.memo(
-  ({ children }) => {
-    const { spacing } = useTheme();
-    return (
-      <Paper
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          transform: "translate(-50%, -50%)",
-          width: spacing(45),
-          padding: spacing(2),
-        }}
-      >
-        {children}
-      </Paper>
-    );
-  },
-);
+import { useFirebase } from "src/contexts/Firebase";
 
-const BrandBox: React.FC = React.memo(() => {
+const BrandBox: React.FC = () => {
   const { spacing } = useTheme();
   return (
     <Box
@@ -44,48 +27,62 @@ const BrandBox: React.FC = React.memo(() => {
       </Typography>
     </Box>
   );
-});
+};
 
-const ProviderStack: React.FC<React.PropsWithChildren> = React.memo(
-  ({ children }) => {
-    const { spacing } = useTheme();
-    return (
-      <Stack spacing={2} sx={{ marginTop: spacing(2) }}>
-        {children}
-      </Stack>
-    );
-  },
-);
-
-const GoogleButton: React.FC = React.memo(() => {
+const ProviderStack: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { spacing } = useTheme();
   return (
-    <Button fullWidth variant="contained" startIcon={<FaGoogle />}>
+    <Stack spacing={2} sx={{ marginTop: spacing(2) }}>
+      {children}
+    </Stack>
+  );
+};
+
+const GoogleButton: React.FC = () => {
+  const { auth, googleProvider } = useFirebase();
+  return (
+    <Button
+      fullWidth
+      variant="contained"
+      startIcon={<FaGoogle />}
+      onClick={() => signInWithRedirect(auth, googleProvider)}
+    >
       Continue with Google
     </Button>
   );
-});
+};
 
-const GitHubButton: React.FC = React.memo(() => {
+const GitHubButton: React.FC = () => {
   return (
     <Button fullWidth variant="contained" startIcon={<FaGithub />}>
       Continue with GitHub
     </Button>
   );
-});
+};
 
 const AuthDialog: React.FC<{
   open: boolean;
   onClose: () => void;
 }> = React.memo(({ open, onClose }) => {
+  const { spacing } = useTheme();
   return (
     <Modal open={open} onClose={onClose}>
-      <DialogPaper>
+      <Paper
+        sx={{
+          top: "50%",
+          left: "50%",
+          position: "absolute",
+          transform: "translate(-50%, -50%)",
+          width: spacing(45),
+          padding: spacing(2),
+        }}
+      >
         <BrandBox />
         <ProviderStack>
           <GoogleButton />
           <GitHubButton />
         </ProviderStack>
-      </DialogPaper>
+      </Paper>
     </Modal>
   );
 });

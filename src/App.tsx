@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React from "react";
 
 import { DialogProvider } from "src/contexts/Dialog";
+import { FirebaseProvider } from "src/contexts/Firebase";
 import { WorkflowProvider } from "src/contexts/Workflow";
 import Canvas from "src/pages/Canvas";
 
@@ -21,9 +22,11 @@ const AppContext: React.FC<React.PropsWithChildren> = React.memo(
     return (
       <ThemeProvider theme={AppTheme}>
         <CssBaseline />
-        <DialogProvider>
-          <WorkflowProvider>{children}</WorkflowProvider>
-        </DialogProvider>
+        <FirebaseProvider>
+          <DialogProvider>
+            <WorkflowProvider>{children}</WorkflowProvider>
+          </DialogProvider>
+        </FirebaseProvider>
       </ThemeProvider>
     );
   },
