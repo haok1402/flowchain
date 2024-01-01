@@ -10,8 +10,8 @@ import { Edge, OnEdgesChange, applyEdgeChanges } from "reactflow";
 import { OnConnect, addEdge } from "reactflow";
 import { NodeTypes } from "reactflow";
 
-import { InputNode } from "src/components/Workflow/Nodes";
-import { OutputNode } from "src/components/Workflow/Nodes";
+import { InputNode } from "src/components/Workflow/BuildNodes";
+import { OutputNode } from "src/components/Workflow/BuildNodes";
 
 const WorkflowContext = createContext<{
   nodes: Node[];
