@@ -1,0 +1,10 @@
+# Website
+website/build/**
+website/node_modules/**
+
+# Functions
+functions/venv/**
+functions/**/__pycache__/**
+
+# Miscellaneous
+*.log
