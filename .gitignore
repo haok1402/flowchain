@@ -1,11 +1,2 @@
-# Website
-website/build/**
-website/node_modules/**
-
-# Functions
-functions/venv/**
-functions/**/__pycache__/**
-
-# Miscellaneous
-.vscode/**
-*.log
+build/**
+node_modules/**
