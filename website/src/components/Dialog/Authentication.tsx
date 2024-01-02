@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import { signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth";
 import React from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { FaTerminal } from "react-icons/fa";
@@ -39,13 +40,17 @@ const ProviderStack: React.FC<React.PropsWithChildren> = ({ children }) => {
 };
 
 const GoogleButton: React.FC = () => {
-  const { auth, googleProvider } = useFirebase();
+  const { auth } = useFirebase();
   return (
     <Button
       fullWidth
       variant="contained"
       startIcon={<FaGoogle />}
-      onClick={() => signInWithRedirect(auth, googleProvider)}
+      onClick={async () => {
+        const googleProvider = new GoogleAuthProvider();
+        googleProvider.addScope("profile");
+        await signInWithRedirect(auth, googleProvider);
+      }}
     >
       Continue with Google
     </Button>

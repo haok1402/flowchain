@@ -1,7 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { Auth, User } from "firebase/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
+import {
+  Functions,
+  connectFunctionsEmulator,
+  getFunctions,
+} from "firebase/functions";
 import React, { createContext, useContext } from "react";
 import { useEffect, useState } from "react";
 
@@ -15,19 +19,20 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 
-const googleProvider = new GoogleAuthProvider();
-googleProvider.addScope("https://www.googleapis.com/auth/userinfo.email");
+const functions = getFunctions(app);
+connectFunctionsEmulator(functions, "localhost", 5001);
 
 const FirebaseContext = createContext<{
   auth: Auth;
-  googleProvider: GoogleAuthProvider;
+  functions: Functions;
   user: User | null;
 }>({
   auth,
-  googleProvider,
   user: null,
+  functions,
 });
 
 export const FirebaseProvider: React.FC<React.PropsWithChildren> = ({
@@ -39,7 +44,7 @@ export const FirebaseProvider: React.FC<React.PropsWithChildren> = ({
   }, []);
 
   return (
-    <FirebaseContext.Provider value={{ auth, googleProvider, user }}>
+    <FirebaseContext.Provider value={{ auth, functions, user }}>
       {children}
     </FirebaseContext.Provider>
   );

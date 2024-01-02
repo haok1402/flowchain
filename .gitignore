@@ -7,4 +7,5 @@ functions/venv/**
 functions/**/__pycache__/**
 
 # Miscellaneous
+.vscode/**
 *.log
