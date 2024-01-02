@@ -75,17 +75,17 @@ const CardAction: React.FC<CardActionProps> = React.memo(
   },
 );
 
-export interface InputNodeData {
+export interface SourceNodeData {
   title: string;
   source: "document" | "website";
   payload: { websiteLink: string };
 }
 
-interface InputNodeProps extends NodeProps {
-  data: InputNodeData;
+interface SourceNodeProps extends NodeProps {
+  data: SourceNodeData;
 }
 
-export const InputNode: React.FC<InputNodeProps> = React.memo(
+export const SourceNode: React.FC<SourceNodeProps> = React.memo(
   ({ id, data }) => {
     const { spacing, palette } = useTheme();
 
@@ -122,7 +122,7 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
               ...node.data,
               title,
               source,
-              payload: { websiteURL: websiteLink },
+              payload: { websiteLink },
             };
           }
           return node;
@@ -133,14 +133,17 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
     const { nodes, edges, setEdges } = useWorkflow();
     const handleDeleteOnClick = useCallback(() => {
       let nodeToDelete = null;
-      const newNodes = nodes.reduce((acc, node) => {
-        if (node.id === id) {
-          nodeToDelete = node;
-        } else {
-          acc.push(node);
-        }
-        return acc;
-      }, [] as Node[]);
+      const newNodes = nodes.reduce(
+        (acc, node) => {
+          if (node.id === id) {
+            nodeToDelete = node;
+          } else {
+            acc.push(node);
+          }
+          return acc;
+        },
+        [] as Node<SourceNodeData | TargetNodeData>[],
+      );
       if (nodeToDelete !== null) {
         setNodes(newNodes);
         const connectedEdges = getConnectedEdges([nodeToDelete], edges);
@@ -221,15 +224,16 @@ export const InputNode: React.FC<InputNodeProps> = React.memo(
   },
 );
 
-export interface OutputNodeData {
+export interface TargetNodeData {
   title: string;
+  payload: { response: string };
 }
 
-interface OutputNodeProps extends NodeProps {
-  data: OutputNodeData;
+interface TargetNodeProps extends NodeProps {
+  data: TargetNodeData;
 }
 
-export const OutputNode: React.FC<OutputNodeProps> = React.memo(
+export const TargetNode: React.FC<TargetNodeProps> = React.memo(
   ({ id, data }) => {
     const { spacing, palette } = useTheme();
 
@@ -259,14 +263,17 @@ export const OutputNode: React.FC<OutputNodeProps> = React.memo(
     const { nodes, edges, setEdges } = useWorkflow();
     const handleDeleteOnClick = useCallback(() => {
       let nodeToDelete = null;
-      const newNodes = nodes.reduce((acc, node) => {
-        if (node.id === id) {
-          nodeToDelete = node;
-        } else {
-          acc.push(node);
-        }
-        return acc;
-      }, [] as Node[]);
+      const newNodes = nodes.reduce(
+        (acc, node) => {
+          if (node.id === id) {
+            nodeToDelete = node;
+          } else {
+            acc.push(node);
+          }
+          return acc;
+        },
+        [] as Node<SourceNodeData | TargetNodeData>[],
+      );
       if (nodeToDelete !== null) {
         setNodes(newNodes);
         const connectedEdges = getConnectedEdges([nodeToDelete], edges);

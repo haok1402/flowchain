@@ -12,7 +12,11 @@
     {
       "source": "functions",
       "codebase": "default",
-      "ignore": ["venv"]
+      "ignore": ["node_modules"],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
     }
   ]
 }

@@ -10,22 +10,24 @@ import { Edge, OnEdgesChange, applyEdgeChanges } from "reactflow";
 import { OnConnect, addEdge } from "reactflow";
 import { NodeTypes } from "reactflow";
 
-import { InputNode } from "src/components/Workflow/Nodes";
-import { OutputNode } from "src/components/Workflow/Nodes";
+import { SourceNode, SourceNodeData } from "src/components/Workflow/Nodes";
+import { TargetNode, TargetNodeData } from "src/components/Workflow/Nodes";
 
 const WorkflowContext = createContext<{
-  nodes: Node[];
+  nodes: Node<SourceNodeData | TargetNodeData>[];
   edges: Edge[];
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+  setNodes: React.Dispatch<
+    React.SetStateAction<Node<SourceNodeData | TargetNodeData>[]>
+  >;
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
 
   nodeTypes: NodeTypes;
-  buildType: "fc:input" | "fc:robot" | "fc:output";
+  buildType: "source" | "robot" | "target";
   setBuildType: React.Dispatch<
-    React.SetStateAction<"fc:input" | "fc:robot" | "fc:output">
+    React.SetStateAction<"source" | "robot" | "target">
   >;
 }>({
   nodes: [],
@@ -37,29 +39,32 @@ const WorkflowContext = createContext<{
   onConnect: () => {},
 
   nodeTypes: {},
-  buildType: "fc:input",
+  buildType: "source",
   setBuildType: () => {},
 });
 
-const initialNodes: Node[] = [
+const initialNodes: Node<SourceNodeData | TargetNodeData>[] = [
   {
     id: "1",
     data: {
       title: "Source",
-      source: "document",
+      source: "website",
       payload: {
-        websiteLink: "",
+        websiteLink: "https://airtable.com/appdHqjbBabD5YW37/shrmPt6bz1wCkrplO",
       },
     },
-    type: "fc:input",
+    type: "source",
     position: { x: 0, y: 0 },
   },
   {
     id: "2",
     data: {
       title: "Target",
+      payload: {
+        response: "",
+      },
     },
-    type: "fc:output",
+    type: "target",
     position: { x: window.innerWidth / 2, y: -window.innerHeight / 4 },
   },
 ];
@@ -75,8 +80,8 @@ const initialEdges: Edge[] = [
 export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -93,14 +98,14 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
 
   const nodeTypes = useMemo(
     () => ({
-      "fc:input": InputNode,
-      "fc:output": OutputNode,
+      source: SourceNode,
+      target: TargetNode,
     }),
     [],
   );
-  const [buildType, setBuildType] = useState<
-    "fc:input" | "fc:robot" | "fc:output"
-  >("fc:input");
+  const [buildType, setBuildType] = useState<"source" | "robot" | "target">(
+    "source",
+  );
 
   return (
     <WorkflowContext.Provider

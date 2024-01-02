@@ -40,20 +40,20 @@ const BuildPanel = React.memo(() => {
     <Panel position="bottom-center">
       <Paper elevation={3}>
         <BuildButton
-          onClick={() => setBuildType("fc:input")}
-          isSelected={buildType === "fc:input"}
+          onClick={() => setBuildType("source")}
+          isSelected={buildType === "source"}
         >
           <ImEnter size={theme.spacing(2.5)} />
         </BuildButton>
         <BuildButton
-          onClick={() => setBuildType("fc:robot")}
-          isSelected={buildType === "fc:robot"}
+          onClick={() => setBuildType("robot")}
+          isSelected={buildType === "robot"}
         >
           <RiRobot2Line size={theme.spacing(2.5)} />
         </BuildButton>
         <BuildButton
-          onClick={() => setBuildType("fc:output")}
-          isSelected={buildType === "fc:output"}
+          onClick={() => setBuildType("target")}
+          isSelected={buildType === "target"}
         >
           <ImExit size={theme.spacing(2.5)} />
         </BuildButton>

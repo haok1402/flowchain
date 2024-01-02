@@ -6,9 +6,9 @@ import React from "react";
 import ReactFlow from "reactflow";
 import { Background, BackgroundVariant } from "reactflow";
 
-import ActionPanel from "src/components/Workflow/ActionPanel";
-import BuildPanel from "src/components/Workflow/BuildPanel";
-import ProfilePanel from "src/components/Workflow/ProfilePanel";
+import ActionPanel from "src/components/Workflow/Panel/Action";
+import BuildPanel from "src/components/Workflow/Panel/Build";
+import ProfilePanel from "src/components/Workflow/Panel/Profile";
 import { useWorkflow } from "src/contexts/Workflow";
 
 const StyledReactFlow = styled(ReactFlow)<{ theme: Theme }>`
