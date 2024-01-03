@@ -1,12 +1,9 @@
-import { SourceNodeData, TargetNodeData } from "../Nodes";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
 import { httpsCallable } from "firebase/functions";
 import React, { useCallback } from "react";
 import { MdPlayArrow } from "react-icons/md";
-import { Edge, Node } from "reactflow";
-import { getIncomers, getOutgoers } from "reactflow";
 import { Panel } from "reactflow";
 
 import { useDialog } from "src/contexts/Dialog";
@@ -17,7 +14,7 @@ const ActionPanel = React.memo(() => {
   const { spacing } = useTheme();
   const { user, functions } = useFirebase();
   const { triggerAuthDialog } = useDialog();
-  const { nodes, edges } = useWorkflow();
+  const { nodes } = useWorkflow();
 
   /**
    * This function processes the workflow asynchronously while obeying the
@@ -33,7 +30,8 @@ const ActionPanel = React.memo(() => {
       nodes.map(async (node) => {
         if (node.type === "source") {
           const payload = await executeSourceNode(node.data.payload);
-          console.log(payload.data);
+          // @ts-ignore
+          console.log(payload.data.text);
           completed.add(node.id);
         }
       }),
