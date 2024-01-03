@@ -29,7 +29,7 @@ const ActionPanel = React.memo(() => {
     await Promise.all(
       nodes.map(async (node) => {
         if (node.type === "source") {
-          const payload = await executeSourceNode(node.data.payload);
+          const payload = await executeSourceNode(node.data);
           // @ts-ignore
           console.log(payload.data.text);
           completed.add(node.id);
