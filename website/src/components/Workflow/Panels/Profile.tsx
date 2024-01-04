@@ -12,6 +12,9 @@ const ProfilePanel = React.memo(() => {
     <Panel position="top-right">
       <Avatar
         src={user?.photoURL || ""}
+        imgProps={{
+          referrerPolicy: "no-referrer",
+        }}
         sx={{ cursor: "pointer" }}
         onClick={() => {
           signOut(auth);
