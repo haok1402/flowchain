@@ -147,11 +147,25 @@ const TargetNode: React.FC<TargetNodeProps> = React.memo(({ id, data }) => {
               <MdContentCopy />
             </IconButton>
           </Box>
-          <Typography>
-            <Skeleton />
-            <Skeleton animation="wave" />
-            <Skeleton animation={false} />
-          </Typography>
+          {data.response.text === "" ? (
+            <>
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </>
+          ) : (
+            <Typography
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 3,
+              }}
+            >
+              {JSON.stringify(data.response.text)}
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </>

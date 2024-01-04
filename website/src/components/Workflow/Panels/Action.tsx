@@ -5,17 +5,21 @@ import { httpsCallable } from "firebase/functions";
 import React, { useCallback } from "react";
 import { MdPlayArrow } from "react-icons/md";
 import { Panel } from "reactflow";
+import { getIncomers, getOutgoers } from "reactflow";
 
 import { useDialog } from "@contexts/Dialog";
 import { useFirebase } from "@contexts/Firebase";
 import { useWorkflow } from "@contexts/Workflow";
 import { NodeData as SourceNodeData } from "@shared/workflow/nodes/source";
+import { Request as SourceNodeRequest } from "@shared/workflow/nodes/source";
+import { Response as SourceNodeResponse } from "@shared/workflow/nodes/source";
 
 const ActionPanel = React.memo(() => {
   const { spacing } = useTheme();
   const { user, functions } = useFirebase();
   const { triggerAuthDialog } = useDialog();
-  const { nodes } = useWorkflow();
+  const { nodes, setNodes } = useWorkflow();
+  const { edges } = useWorkflow();
 
   /**
    * This function processes the workflow asynchronously while obeying the
@@ -26,19 +30,65 @@ const ActionPanel = React.memo(() => {
    */
   const executeWorkflow = useCallback(async () => {
     const completed: Set<string> = new Set();
-    const executeSourceNode = httpsCallable(functions, "executeSourceNode");
+
+    const executeSourceNode = httpsCallable<
+      SourceNodeRequest,
+      SourceNodeResponse
+    >(functions, "executeSourceNode");
+
     await Promise.all(
       nodes.map(async (node) => {
         if (node.type === "source") {
+          const sourceId = node.id;
           const response = await executeSourceNode(
             (node.data as SourceNodeData).request,
           );
-          console.log(response);
+          setNodes((value) =>
+            value.map((node) => {
+              if (node.id === sourceId) {
+                node.data = {
+                  ...node.data,
+                  response: response.data,
+                };
+              }
+              return node;
+            }),
+          );
           completed.add(node.id);
+
+          const targets = getOutgoers(node, nodes, edges);
+          targets.forEach((node) => {
+            const sources = getIncomers(node, nodes, edges);
+            if (sources.every((node) => completed.has(node.id))) {
+              const targetId = node.id;
+              setNodes((value) =>
+                value.map((node) => {
+                  if (node.id === targetId) {
+                    node.data = {
+                      ...node.data,
+                      response: sources.reduce(
+                        (response, node) => {
+                          const { text } = response;
+                          const { text: nextText } = node.data.response;
+                          return {
+                            text: `${text}\n${nextText}`.trim(),
+                          };
+                        },
+                        {
+                          text: "",
+                        },
+                      ),
+                    };
+                  }
+                  return node;
+                }),
+              );
+            }
+          });
         }
       }),
     );
-  }, [nodes, functions]);
+  }, [nodes, functions, edges, setNodes]);
 
   const handlePlayOnClick = useCallback(() => {
     !user ? triggerAuthDialog() : executeWorkflow();
