@@ -1,0 +1,6 @@
+{
+  "importOrder": ["^(reactflow|@contexts|@components|@pages|@shared)/(.*)$"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}

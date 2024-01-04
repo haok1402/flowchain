@@ -1,23 +1,51 @@
+import { CssBaseline } from "@mui/material";
+import { indigo } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 
-import { SourceNodeRequest } from "@shared/workflow";
+import { DialogProvider } from "@contexts/Dialog";
+import { FirebaseProvider } from "@contexts/Firebase";
+import { WorkflowProvider } from "@contexts/Workflow";
+import Canvas from "@pages/Canvas";
+import "reactflow/dist/style.css";
 
-console.log({ title: "hello" } as SourceNodeRequest);
+const AppTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: indigo[500],
+    },
+  },
+});
+
+const AppContexts: React.FC<React.PropsWithChildren> = ({ children }) => {
+  return (
+    <ThemeProvider theme={AppTheme}>
+      <CssBaseline />
+      <FirebaseProvider>
+        <DialogProvider>
+          <WorkflowProvider>{children}</WorkflowProvider>
+        </DialogProvider>
+      </FirebaseProvider>
+    </ThemeProvider>
+  );
+};
+
+const App = React.memo(() => {
+  return (
+    <AppContexts>
+      <Canvas />
+    </AppContexts>
+  );
+});
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
+
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
