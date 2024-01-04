@@ -143,7 +143,11 @@ const TargetNode: React.FC<TargetNodeProps> = React.memo(({ id, data }) => {
             }}
           >
             <Typography color={palette.text.secondary}>Response</Typography>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                navigator.clipboard.writeText(data.response.text);
+              }}
+            >
               <MdContentCopy />
             </IconButton>
           </Box>
