@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Develop Website",
+      "type": "shell",
+      "command": "cd website && yarn start",
+      "isBackground": true
+    },
+    {
+      "label": "Develop Functions",
+      "type": "shell",
+      "command": "cd functions && yarn build:watch",
+      "isBackground": true
+    },
+    {
+      "label": "Emulate Functions",
+      "type": "shell",
+      "command": "cd functions && firebase emulators:start --only functions",
+      "isBackground": true
+    },
+    {
+      "label": "Run All",
+      "type": "shell",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Develop Website", "Develop Functions", "Emulate Functions"]
+    }
+  ]
+}
