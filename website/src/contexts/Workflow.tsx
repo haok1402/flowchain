@@ -1,7 +1,12 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import { useCallback, useMemo, useState } from "react";
-import { Node, OnNodesChange, applyNodeChanges } from "reactflow";
+import {
+  Node,
+  NodeAddChange,
+  OnNodesChange,
+  applyNodeChanges,
+} from "reactflow";
 import { Edge, OnEdgesChange, applyEdgeChanges } from "reactflow";
 import { OnConnect, addEdge } from "reactflow";
 import { NodeTypes } from "reactflow";
@@ -127,45 +132,47 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
         });
         switch (buildType) {
           case "source":
-            onNodesChange([
-              {
-                type: "add",
-                item: {
-                  id: nodeId,
-                  position: nodePosition,
-                  data: {
-                    label: "New Source",
-                    status: "editing",
-                    request: {
-                      type: "document",
-                      payload: {
-                        ref: "",
-                      },
+            const NewSource: NodeAddChange<SourceNodeData> = {
+              type: "add",
+              item: {
+                id: nodeId,
+                position: nodePosition,
+                data: {
+                  label: "New Source",
+                  status: "Editing",
+                  request: {
+                    type: "document",
+                    payload: {
+                      ref: "",
                     },
                   },
-                  type: "source",
+                  response: {
+                    text: "",
+                  },
                 },
+                type: "source",
               },
-            ]);
+            };
+            onNodesChange([NewSource]);
             break;
           case "target":
-            onNodesChange([
-              {
-                type: "add",
-                item: {
-                  id: nodeId,
-                  position: nodePosition,
-                  data: {
-                    label: "New Target",
-                    status: "editing",
-                    response: {
-                      text: "",
-                    },
+            const NewTarget: NodeAddChange<TargetNodeData> = {
+              type: "add",
+              item: {
+                id: nodeId,
+                position: nodePosition,
+                data: {
+                  label: "New Target",
+                  status: "Editing",
+                  request: {},
+                  response: {
+                    text: "",
                   },
-                  type: "target",
                 },
+                type: "target",
               },
-            ]);
+            };
+            onNodesChange([NewTarget]);
             break;
         }
       }
