@@ -21,7 +21,7 @@ const Canvas = React.memo(() => {
   const theme = useTheme();
   const { nodes, edges } = useWorkflow();
   const { onNodesChange, onEdgesChange, onConnect } = useWorkflow();
-  const { nodeTypes } = useWorkflow();
+  const { nodeTypes, handleOnClick } = useWorkflow();
   return (
     <Box style={{ width: "100vw", height: "100vh" }}>
       <StyledReactFlow
@@ -32,6 +32,7 @@ const Canvas = React.memo(() => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        onClick={handleOnClick}
         fitView
         fitViewOptions={{ maxZoom: 1 }}
       >

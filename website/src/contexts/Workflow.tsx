@@ -5,6 +5,7 @@ import { Node, OnNodesChange, applyNodeChanges } from "reactflow";
 import { Edge, OnEdgesChange, applyEdgeChanges } from "reactflow";
 import { OnConnect, addEdge } from "reactflow";
 import { NodeTypes } from "reactflow";
+import { useReactFlow } from "reactflow";
 
 import SourceNode from "@components/Workflow/Nodes/Source";
 import TargetNode from "@components/Workflow/Nodes/Target";
@@ -27,6 +28,7 @@ const WorkflowContext = createContext<{
   nodeTypes: NodeTypes;
   buildType: BuildType;
   setBuildType: React.Dispatch<React.SetStateAction<BuildType>>;
+  handleOnClick: React.MouseEventHandler<HTMLDivElement>;
 }>({
   nodes: [],
   edges: [],
@@ -40,6 +42,7 @@ const WorkflowContext = createContext<{
   nodeTypes: {},
   buildType: "source",
   setBuildType: () => {},
+  handleOnClick: () => {},
 });
 
 const initialNodes: Node<NodeData>[] = [
@@ -110,6 +113,61 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
 
   const [buildType, setBuildType] = useState<BuildType>("source");
 
+  const { screenToFlowPosition } = useReactFlow();
+  const handleOnClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.ctrlKey) {
+        const nodeId = `${nodes.length + 1}`;
+        const nodePosition = screenToFlowPosition({
+          x: e.clientX,
+          y: e.clientY,
+        });
+        switch (buildType) {
+          case "source":
+            onNodesChange([
+              {
+                type: "add",
+                item: {
+                  id: nodeId,
+                  position: nodePosition,
+                  data: {
+                    label: "New Source",
+                    request: {
+                      type: "document",
+                      payload: {
+                        ref: "",
+                      },
+                    },
+                  } as SourceNodeData,
+                  type: "source",
+                },
+              },
+            ]);
+            break;
+          case "target":
+            onNodesChange([
+              {
+                type: "add",
+                item: {
+                  id: nodeId,
+                  position: nodePosition,
+                  data: {
+                    label: "New Target",
+                    response: {
+                      text: "",
+                    },
+                  } as TargetNodeData,
+                  type: "target",
+                },
+              },
+            ]);
+            break;
+        }
+      }
+    },
+    [nodes, buildType, onNodesChange, screenToFlowPosition],
+  );
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -125,6 +183,7 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
         nodeTypes,
         buildType,
         setBuildType,
+        handleOnClick: handleOnClick,
       }}
     >
       {children}

@@ -3,6 +3,7 @@ import { indigo } from "@mui/material/colors";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ReactFlowProvider } from "reactflow";
 
 import { DialogProvider } from "@contexts/Dialog";
 import { FirebaseProvider } from "@contexts/Firebase";
@@ -25,7 +26,9 @@ const AppContexts: React.FC<React.PropsWithChildren> = ({ children }) => {
       <CssBaseline />
       <FirebaseProvider>
         <DialogProvider>
-          <WorkflowProvider>{children}</WorkflowProvider>
+          <ReactFlowProvider>
+            <WorkflowProvider>{children}</WorkflowProvider>
+          </ReactFlowProvider>
         </DialogProvider>
       </FirebaseProvider>
     </ThemeProvider>
