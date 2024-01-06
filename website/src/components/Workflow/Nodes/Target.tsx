@@ -1,4 +1,3 @@
-import { NodeAction, NodeLabel } from "./Shared";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -13,6 +12,11 @@ import { MdContentCopy } from "react-icons/md";
 import { Handle, Position } from "reactflow";
 import { NodeProps } from "reactflow";
 
+import {
+  NodeAction,
+  NodeLabel,
+  NodeStatus,
+} from "@components/Workflow/Nodes/Shared";
 import { NodeData as TargetNodeData } from "@shared/workflow/nodes/target";
 
 interface TargetNodeProps extends NodeProps {
@@ -23,7 +27,7 @@ const TargetNode: React.FC<TargetNodeProps> = React.memo(({ id, data }) => {
   const { spacing, palette } = useTheme();
 
   return (
-    <>
+    <NodeStatus id={id} data={data}>
       <Handle type="target" position={Position.Left} />
       <Card sx={{ width: spacing(45) }}>
         <CardHeader
@@ -70,7 +74,7 @@ const TargetNode: React.FC<TargetNodeProps> = React.memo(({ id, data }) => {
           )}
         </CardContent>
       </Card>
-    </>
+    </NodeStatus>
   );
 });
 

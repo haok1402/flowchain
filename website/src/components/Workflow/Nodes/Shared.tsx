@@ -1,3 +1,4 @@
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -106,9 +107,37 @@ export const NodeAction: React.FC<NodeActionProps> = React.memo(({ id }) => {
       <IconButton>
         <MdHelp />
       </IconButton>
-      <IconButton>
-        <MdClose onClick={handleMdCloseOnClick} />
+      <IconButton onClick={handleMdCloseOnClick}>
+        <MdClose />
       </IconButton>
     </Box>
   );
 });
+
+interface NodeStatusProps {
+  id: string;
+  data: NodeData;
+}
+
+export const NodeStatus: React.FC<React.PropsWithChildren<NodeStatusProps>> =
+  React.memo(({ id, data, children }) => {
+    if (data.status === "Editing") {
+      return <>{children}</>;
+    }
+    return (
+      <Badge
+        color={
+          data.status === "Running"
+            ? "primary"
+            : data.status === "Completed"
+              ? "success"
+              : data.status === "Failed"
+                ? "error"
+                : "default"
+        }
+        badgeContent={data.status}
+      >
+        {children}
+      </Badge>
+    );
+  });

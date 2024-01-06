@@ -15,7 +15,11 @@ import { MdCloudUpload } from "react-icons/md";
 import { Handle, Position } from "reactflow";
 import { NodeProps } from "reactflow";
 
-import { NodeAction, NodeLabel } from "@components/Workflow/Nodes/Shared";
+import {
+  NodeAction,
+  NodeLabel,
+  NodeStatus,
+} from "@components/Workflow/Nodes/Shared";
 import { useWorkflow } from "@contexts/Workflow";
 import { NodeData as SourceNodeData } from "@shared/workflow/nodes/source";
 
@@ -73,7 +77,7 @@ const SourceNode: React.FC<SourceNodeProps> = React.memo(({ id, data }) => {
   }, [id, type, url, ref, setNodes]);
 
   return (
-    <>
+    <NodeStatus id={id} data={data}>
       <Handle type="source" position={Position.Right} />
       <Card sx={{ width: spacing(45) }}>
         <CardHeader
@@ -134,7 +138,7 @@ const SourceNode: React.FC<SourceNodeProps> = React.memo(({ id, data }) => {
           )}
         </CardContent>
       </Card>
-    </>
+    </NodeStatus>
   );
 });
 

@@ -7,7 +7,7 @@ export type Request = {
 
 export type NodeData = {
   label: string;
-  status: "editing" | "running" | "success" | "failure";
+  status: "Editing" | "Running" | "Completed" | "Failed";
   request: Request;
   response: Response;
 }

@@ -50,7 +50,7 @@ const initialNodes: Node<NodeData>[] = [
     id: "1",
     data: {
       label: "My Resume",
-      status: "editing",
+      status: "Editing",
       request: {
         type: "website",
         payload: {
@@ -68,7 +68,7 @@ const initialNodes: Node<NodeData>[] = [
     id: "2",
     data: {
       label: "Cover Letter",
-      status: "editing",
+      status: "Editing",
       request: {},
       response: {
         text: "",
