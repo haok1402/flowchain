@@ -34,6 +34,7 @@ const ActionPanel = React.memo(() => {
         node.data = {
           ...node.data,
           status: "Editing",
+          response: { text: "" },
         };
         return node;
       }),
