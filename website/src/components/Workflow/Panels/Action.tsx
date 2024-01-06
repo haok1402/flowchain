@@ -40,6 +40,17 @@ const ActionPanel = React.memo(() => {
       nodes.map(async (node) => {
         if (node.type === "source") {
           const sourceId = node.id;
+          setNodes((value) =>
+            value.map((node) => {
+              if (node.id === sourceId) {
+                node.data = {
+                  ...node.data,
+                  status: "Running",
+                };
+              }
+              return node;
+            }),
+          );
           const response = await executeSourceNode(
             (node.data as SourceNodeData).request,
           );
@@ -48,6 +59,7 @@ const ActionPanel = React.memo(() => {
               if (node.id === sourceId) {
                 node.data = {
                   ...node.data,
+                  status: "Completed",
                   response: response.data,
                 };
               }
@@ -66,6 +78,18 @@ const ActionPanel = React.memo(() => {
                   if (node.id === targetId) {
                     node.data = {
                       ...node.data,
+                      status: "Running",
+                    };
+                  }
+                  return node;
+                }),
+              );
+              setNodes((value) =>
+                value.map((node) => {
+                  if (node.id === targetId) {
+                    node.data = {
+                      ...node.data,
+                      status: "Completed",
                       response: sources.reduce(
                         (response, node) => {
                           const { text } = response;
