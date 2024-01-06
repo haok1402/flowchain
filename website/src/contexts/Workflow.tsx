@@ -28,7 +28,7 @@ const WorkflowContext = createContext<{
   nodeTypes: NodeTypes;
   buildType: BuildType;
   setBuildType: React.Dispatch<React.SetStateAction<BuildType>>;
-  handleOnClick: React.MouseEventHandler<HTMLDivElement>;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
 }>({
   nodes: [],
   edges: [],
@@ -42,7 +42,7 @@ const WorkflowContext = createContext<{
   nodeTypes: {},
   buildType: "source",
   setBuildType: () => {},
-  handleOnClick: () => {},
+  onClick: () => {},
 });
 
 const initialNodes: Node<NodeData>[] = [
@@ -114,7 +114,7 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
   const [buildType, setBuildType] = useState<BuildType>("source");
 
   const { screenToFlowPosition } = useReactFlow();
-  const handleOnClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+  const onClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (e.ctrlKey) {
         const nodeId = `${nodes.length + 1}`;
@@ -183,7 +183,7 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
         nodeTypes,
         buildType,
         setBuildType,
-        handleOnClick: handleOnClick,
+        onClick,
       }}
     >
       {children}
