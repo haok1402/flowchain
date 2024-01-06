@@ -20,6 +20,7 @@ export type Response = {
 
 export type NodeData = {
   label: string;
+  status: "editing" | "running" | "success" | "failure";
   request: Request;
   response: Response;
 }

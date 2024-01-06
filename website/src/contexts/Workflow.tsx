@@ -50,6 +50,7 @@ const initialNodes: Node<NodeData>[] = [
     id: "1",
     data: {
       label: "My Resume",
+      status: "editing",
       request: {
         type: "website",
         payload: {
@@ -67,6 +68,8 @@ const initialNodes: Node<NodeData>[] = [
     id: "2",
     data: {
       label: "Cover Letter",
+      status: "editing",
+      request: {},
       response: {
         text: "",
       },
@@ -132,13 +135,14 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
                   position: nodePosition,
                   data: {
                     label: "New Source",
+                    status: "editing",
                     request: {
                       type: "document",
                       payload: {
                         ref: "",
                       },
                     },
-                  } as SourceNodeData,
+                  },
                   type: "source",
                 },
               },
@@ -153,10 +157,11 @@ export const WorkflowProvider: React.FC<React.PropsWithChildren> = ({
                   position: nodePosition,
                   data: {
                     label: "New Target",
+                    status: "editing",
                     response: {
                       text: "",
                     },
-                  } as TargetNodeData,
+                  },
                   type: "target",
                 },
               },
