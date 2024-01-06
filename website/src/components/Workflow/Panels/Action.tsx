@@ -29,6 +29,16 @@ const ActionPanel = React.memo(() => {
    * have been processed or when processing is not possible anymore.
    */
   const executeWorkflow = useCallback(async () => {
+    setNodes((value) =>
+      value.map((node) => {
+        node.data = {
+          ...node.data,
+          status: "Editing",
+        };
+        return node;
+      }),
+    );
+
     const completed: Set<string> = new Set();
 
     const executeSourceNode = httpsCallable<
